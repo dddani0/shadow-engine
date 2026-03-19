@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="topbar">
+    <div class="brand">
+      <a routerLink="/" style="text-decoration: none"><div class="brandTitle">Shadow Engine</div></a>
+      <div class="brandSubtitle">Playback</div>
+    </div>
+    <div class="btnRow">
+      <a [routerLink]="['/projects', projectId()]"><button>Edit</button></a>
+      <button [disabled]="loading()" (click)="restart()">Restart</button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <p class="muted" style="color: rgba(255, 97, 97, 0.9)">{{ error() }}</p>
+  }
+
+  <div class="card">
+    @if (!payload()) {
+      <p class="muted">Loading…</p>
+    } @else if (!payload()!.scene) {
+      <h3 class="cardTitle">No scenes</h3>
+      <p class="muted">Create at least one scene in the editor.</p>
+      <div class="btnRow">
+        <a [routerLink]="['/projects', projectId()]"><button class="primary">Go to editor</button></a>
+      </div>
+    } @else {
+      <div style="display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap">
+        <h3 class="cardTitle" style="margin: 0">
+          {{ payload()!.scene!.title ?? '(scene)' }}
+        </h3>
+        <div class="pill">order {{ payload()!.scene!.orderIndex }}</div>
+        <div class="pill">id {{ payload()!.scene!.id }}</div>
+      </div>
+
+      <div style="margin-top: 10px; white-space: pre-wrap; line-height: 1.5">
+        {{ payload()!.scene!.content }}
+      </div>
+
+      <div style="margin-top: 14px">
+        @if (payload()!.choices.length === 0) {
+          <p class="muted">No choices from this scene.</p>
+        } @else {
+          <div class="btnRow">
+            @for (c of payload()!.choices; track c.id) {
+              <button class="primary" (click)="choose(c.toSceneId)">{{ c.label }}</button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

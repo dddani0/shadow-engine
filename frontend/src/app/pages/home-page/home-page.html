@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brandTitle">Shadow Engine</div>
+      <div class="brandSubtitle">Angular + NestJS</div>
+    </div>
+    <div class="pill">API from localhost:3000</div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3 class="cardTitle">Create project</h3>
+
+      <div class="row">
+        <label>Title</label>
+        <input
+          [value]="newTitle()"
+          (input)="newTitle.set(onTextInput($event))"
+          placeholder="New project"
+        />
+      </div>
+
+      <div class="row">
+        <label>Description</label>
+        <textarea
+          [value]="newDescription()"
+          (input)="newDescription.set(onTextInput($event))"
+          placeholder="Short pitch / thesis summary"
+        ></textarea>
+      </div>
+
+      <div class="btnRow">
+        <button class="primary" [disabled]="!canCreate()" (click)="createProject()">
+          Create
+        </button>
+        <button [disabled]="loading()" (click)="refresh()">Refresh</button>
+      </div>
+
+      @if (error()) {
+        <p class="muted" style="color: rgba(255, 97, 97, 0.9)">{{ error() }}</p>
+      }
+    </div>
+
+    <div class="card">
+      <h3 class="cardTitle">Projects</h3>
+
+      @if (projects() === null) {
+        <p class="muted">Loading…</p>
+      } @else if (projects()!.length === 0) {
+        <p class="muted">No projects yet.</p>
+      } @else {
+        <div class="list">
+          @for (p of projects()!; track p.id) {
+            <div class="listItem">
+              <div>
+                <div style="font-weight: 650">{{ p.title }}</div>
+                <div class="muted">{{ p.description ?? '—' }}</div>
+              </div>
+              <div class="btnRow">
+                <a [routerLink]="['/projects', p.id]"><button>Open</button></a>
+                <a [routerLink]="['/play', p.id]"><button>Play</button></a>
+                <button class="danger" (click)="deleteProject(p.id)">Delete</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
