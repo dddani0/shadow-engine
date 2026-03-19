@@ -1,9 +1,6 @@
-<div class="container">
-  <div class="topbar">
-    <div class="brand">
-      <a routerLink="/" style="text-decoration: none"><div class="brandTitle">Shadow Engine</div></a>
-      <div class="brandSubtitle">Project editor</div>
-    </div>
+<div class="container-fluid">
+  <div class="container">
+    <h1>Editor</h1>
     <div class="btnRow">
       <a [routerLink]="['/play', projectId()]"><button class="primary">Play</button></a>
       <button [disabled]="loading()" (click)="refresh()">Refresh</button>
@@ -11,10 +8,19 @@
   </div>
 
   @if (error()) {
-    <p class="muted" style="color: rgba(255, 97, 97, 0.9)">{{ error() }}</p>
+    <div class="alert danger-alert">{{ error() }}</div>
   }
+  <div class="container-fluid text-center">
+    <canvas class="bg-dark" style="width: 80%"> </canvas>
+  </div>
+  <div class="container">
+    <h1>Timeline</h1>
+  </div>
+  <div class="container">
+    <h1>Manage variables</h1>
+  </div>
 
-  <div class="grid">
+  <!-- <div class="grid">
     <div class="card">
       <h3 class="cardTitle">New scene</h3>
 
@@ -57,10 +63,7 @@
 
       <div class="row">
         <label>From scene</label>
-        <select
-          [value]="choiceFromSceneId()"
-          (change)="choiceFromSceneId.set(onSelect($event))"
-        >
+        <select [value]="choiceFromSceneId()" (change)="choiceFromSceneId.set(onSelect($event))">
           @for (s of scenes(); track s.id) {
             <option [value]="s.id">{{ s.title ?? s.id }}</option>
           }
@@ -69,10 +72,7 @@
 
       <div class="row">
         <label>To scene</label>
-        <select
-          [value]="choiceToSceneId()"
-          (change)="choiceToSceneId.set(onSelect($event))"
-        >
+        <select [value]="choiceToSceneId()" (change)="choiceToSceneId.set(onSelect($event))">
           @for (s of scenes(); track s.id) {
             <option [value]="s.id">{{ s.title ?? s.id }}</option>
           }
@@ -147,6 +147,5 @@
         </div>
       }
     </div>
-  </div>
+  </div> -->
 </div>
-

@@ -1,71 +1,84 @@
-<div class="container">
-  <div class="topbar">
-    <div class="brand">
-      <div class="brandTitle">Shadow Engine</div>
-      <div class="brandSubtitle">Angular + NestJS</div>
-    </div>
-    <div class="pill">API from localhost:3000</div>
+<div class="container-fluid">
+  <div class="container-sm">
+    <h1>Welcome to Shadow Engine</h1>
   </div>
 
-  <div class="grid">
-    <div class="card">
+  <div class="container">
+    <div class="row">
       <h3 class="cardTitle">Create project</h3>
 
       <div class="row">
-        <label>Title</label>
-        <input
-          [value]="newTitle()"
-          (input)="newTitle.set(onTextInput($event))"
-          placeholder="New project"
-        />
+        <div class="form-floating">
+          <input
+            class="form-control"
+            id="floatingTextarea"
+            [value]="newTitle()"
+            (input)="newTitle.set(onTextInput($event))"
+            placeholder="Project title"
+          />
+          <label for="floatInTextarea">Title</label>
+        </div>
       </div>
 
       <div class="row">
-        <label>Description</label>
-        <textarea
-          [value]="newDescription()"
-          (input)="newDescription.set(onTextInput($event))"
-          placeholder="Short pitch / thesis summary"
-        ></textarea>
+        <div class="form-floating">
+          <textarea
+            class="form-control"
+            style="height: 100px"
+            id="floatinTextarea2"
+            [value]="newDescription()"
+            (input)="newDescription.set(onTextInput($event))"
+            placeholder="Description"
+          ></textarea>
+          <label for="floatinTextarea2">Description</label>
+        </div>
       </div>
 
-      <div class="btnRow">
-        <button class="primary" [disabled]="!canCreate()" (click)="createProject()">
-          Create
-        </button>
-        <button [disabled]="loading()" (click)="refresh()">Refresh</button>
+      <div class="row">
+        <div class="container">
+          <button class="primary" [disabled]="!canCreate()" (click)="createProject()">
+            Create
+          </button>
+        </div>
       </div>
 
       @if (error()) {
-        <p class="muted" style="color: rgba(255, 97, 97, 0.9)">{{ error() }}</p>
+        <div class="alert alert-danger">{{ error() }}</div>
       }
     </div>
 
-    <div class="card">
-      <h3 class="cardTitle">Projects</h3>
-
+    <div class="container">
+      <div class="row">
+        <h3>Recent projects</h3>
+      </div>
+      <div class="row">
+        <div class="container">
+          <button [disabled]="loading()" (click)="refresh()">Refresh</button>
+        </div>
+      </div>
       @if (projects() === null) {
-        <p class="muted">Loading…</p>
+        <div class="spinner-grow" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       } @else if (projects()!.length === 0) {
-        <p class="muted">No projects yet.</p>
+        <div class="alert alert-secondary">No recent projects yet.</div>
       } @else {
-        <div class="list">
-          @for (p of projects()!; track p.id) {
-            <div class="listItem">
-              <div>
-                <div style="font-weight: 650">{{ p.title }}</div>
-                <div class="muted">{{ p.description ?? '—' }}</div>
+        <div class="container text-center">
+          <div class="row">
+            @for (p of projects()!; track p.id) {
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">{{ p.title }}</h3>
+                  <p class="card-text">{{ p.description ?? '—' }}</p>
+                  <a [routerLink]="['/projects', p.id]"><button>Open</button></a>
+                  <a [routerLink]="['/play', p.id]"><button>Play</button></a>
+                  <button class="danger" (click)="deleteProject(p.id)">Delete</button>
+                </div>
               </div>
-              <div class="btnRow">
-                <a [routerLink]="['/projects', p.id]"><button>Open</button></a>
-                <a [routerLink]="['/play', p.id]"><button>Play</button></a>
-                <button class="danger" (click)="deleteProject(p.id)">Delete</button>
-              </div>
-            </div>
-          }
+            }
+          </div>
         </div>
       }
     </div>
   </div>
 </div>
-

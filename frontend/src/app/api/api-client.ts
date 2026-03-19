@@ -8,15 +8,18 @@ export class ApiClient {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = '/api';
 
-  // Projects
+  // Get all projects
   listProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.baseUrl}/projects`);
   }
 
+  // Get only recent projects
+  listRecentProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>(`${this.baseUrl}/projects`);
+  }
+
   getProject(id: string): Observable<Project & { scenes?: Scene[] }> {
-    return this.http.get<Project & { scenes?: Scene[] }>(
-      `${this.baseUrl}/projects/${id}`,
-    );
+    return this.http.get<Project & { scenes?: Scene[] }>(`${this.baseUrl}/projects/${id}`);
   }
 
   createProject(body: { title: string; description?: string }): Observable<Project> {
@@ -42,9 +45,7 @@ export class ApiClient {
   }
 
   getScene(id: string): Observable<Scene & { choicesFrom?: Choice[] }> {
-    return this.http.get<Scene & { choicesFrom?: Choice[] }>(
-      `${this.baseUrl}/scenes/${id}`,
-    );
+    return this.http.get<Scene & { choicesFrom?: Choice[] }>(`${this.baseUrl}/scenes/${id}`);
   }
 
   createScene(body: {
@@ -75,12 +76,9 @@ export class ApiClient {
 
   // Choices
   listChoices(sceneId: string): Observable<(Choice & { toScene?: Partial<Scene> })[]> {
-    return this.http.get<(Choice & { toScene?: Partial<Scene> })[]>(
-      `${this.baseUrl}/choices`,
-      {
-        params: { sceneId },
-      },
-    );
+    return this.http.get<(Choice & { toScene?: Partial<Scene> })[]>(`${this.baseUrl}/choices`, {
+      params: { sceneId },
+    });
   }
 
   createChoice(body: {
@@ -112,4 +110,3 @@ export class ApiClient {
     });
   }
 }
-

@@ -25,14 +25,14 @@ export class HomePage {
     this.refresh();
   }
 
-  onTextInput(ev: Event): string {
-    return ((ev.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? '').toString();
+  onTextInput(e: Event): string {
+    return ((e.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? '').toString();
   }
 
   refresh() {
     this.loading.set(true);
     this.error.set(null);
-    this.api.listProjects().subscribe({
+    this.api.listRecentProjects().subscribe({
       next: (p) => this.projects.set(p),
       error: (e) => this.error.set(this.formatError(e)),
       complete: () => this.loading.set(false),
@@ -78,4 +78,3 @@ export class HomePage {
     return `API error${maybe?.status ? ` (${maybe.status})` : ''}: ${maybe?.message ?? 'Unknown'}`;
   }
 }
-
