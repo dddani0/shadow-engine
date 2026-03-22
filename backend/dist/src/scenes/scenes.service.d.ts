@@ -11,7 +11,6 @@ export declare class ScenesService {
         createdAt: Date;
         updatedAt: Date;
         orderIndex: number;
-        content: string;
         metadata: Prisma.JsonValue | null;
         projectId: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
@@ -21,7 +20,6 @@ export declare class ScenesService {
         createdAt: Date;
         updatedAt: Date;
         orderIndex: number;
-        content: string;
         metadata: Prisma.JsonValue | null;
         projectId: string;
     }[]>;
@@ -39,7 +37,6 @@ export declare class ScenesService {
         createdAt: Date;
         updatedAt: Date;
         orderIndex: number;
-        content: string;
         metadata: Prisma.JsonValue | null;
         projectId: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
@@ -49,7 +46,6 @@ export declare class ScenesService {
         createdAt: Date;
         updatedAt: Date;
         orderIndex: number;
-        content: string;
         metadata: Prisma.JsonValue | null;
         projectId: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
@@ -59,7 +55,6 @@ export declare class ScenesService {
         createdAt: Date;
         updatedAt: Date;
         orderIndex: number;
-        content: string;
         metadata: Prisma.JsonValue | null;
         projectId: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;

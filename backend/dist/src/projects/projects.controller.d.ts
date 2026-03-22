@@ -10,6 +10,7 @@ export declare class ProjectsController {
         description: string | null;
         createdAt: Date;
         updatedAt: Date;
+        toTimelineId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
@@ -17,6 +18,7 @@ export declare class ProjectsController {
         description: string | null;
         createdAt: Date;
         updatedAt: Date;
+        toTimelineId: string | null;
     }[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ProjectClient<{
         scenes: {
@@ -25,7 +27,6 @@ export declare class ProjectsController {
             createdAt: Date;
             updatedAt: Date;
             orderIndex: number;
-            content: string;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
             projectId: string;
         }[];
@@ -35,6 +36,7 @@ export declare class ProjectsController {
         description: string | null;
         createdAt: Date;
         updatedAt: Date;
+        toTimelineId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateProjectDto: UpdateProjectDto): import("@prisma/client").Prisma.Prisma__ProjectClient<{
         id: string;
@@ -42,6 +44,7 @@ export declare class ProjectsController {
         description: string | null;
         createdAt: Date;
         updatedAt: Date;
+        toTimelineId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__ProjectClient<{
         id: string;
@@ -49,5 +52,6 @@ export declare class ProjectsController {
         description: string | null;
         createdAt: Date;
         updatedAt: Date;
+        toTimelineId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }

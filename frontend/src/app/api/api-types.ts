@@ -2,6 +2,7 @@ export interface Project {
   id: string;
   title: string;
   description: string | null;
+  scenes: Scene[];
   createdAt: string;
   updatedAt: string;
 }
@@ -10,7 +11,7 @@ export interface Scene {
   id: string;
   projectId: string;
   title: string | null;
-  content: string;
+  componentGroups: ObjectComponentGroup[];
   orderIndex: number;
   metadata: unknown | null;
   createdAt: string;
@@ -25,12 +26,6 @@ export interface Choice {
   orderIndex: number;
 }
 
-export interface PlaybackChoice {
-  id: string;
-  label: string;
-  toSceneId: string;
-}
-
 export interface PlaybackResponse {
   scene: {
     id: string;
@@ -39,6 +34,29 @@ export interface PlaybackResponse {
     metadata: unknown | null;
     orderIndex: number;
   } | null;
-  choices: PlaybackChoice[];
+  choices: Choice[];
 }
 
+export interface Timeline {
+  id: string;
+  actions: Action[];
+}
+
+export interface Sprite {
+  id: string;
+  path: string;
+}
+
+export interface ObjectComponentGroup {
+  id: string;
+  objects: ObjectComponent[];
+}
+
+export interface ObjectComponent {
+  id: string;
+  title: String;
+}
+
+export interface Action {
+  id: string;
+}
