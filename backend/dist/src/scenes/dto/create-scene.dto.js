@@ -4,9 +4,10 @@ exports.CreateSceneDto = void 0;
 class CreateSceneDto {
     projectId;
     title;
-    content;
     orderIndex;
     metadata;
+    objectComponentGroups;
+    timeline;
 }
 exports.CreateSceneDto = CreateSceneDto;
 //# sourceMappingURL=create-scene.dto.js.map

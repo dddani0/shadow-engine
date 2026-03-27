@@ -4,6 +4,7 @@ exports.UpdateProjectDto = void 0;
 class UpdateProjectDto {
     title;
     description;
+    scenes;
 }
 exports.UpdateProjectDto = UpdateProjectDto;
 //# sourceMappingURL=update-project.dto.js.map

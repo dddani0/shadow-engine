@@ -6,7 +6,6 @@ export declare class PlaybackController {
         scene: {
             id: string;
             title: string | null;
-            content: any;
             metadata: import("@prisma/client/runtime/library").JsonValue;
             orderIndex: number;
         };

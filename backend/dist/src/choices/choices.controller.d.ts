@@ -11,31 +11,36 @@ export declare class ChoicesController {
         fromSceneId: string;
         toSceneId: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
-    findByScene(sceneId: string): import("@prisma/client").Prisma.PrismaPromise<{
+    findByScene(sceneId: string): import("@prisma/client").Prisma.PrismaPromise<({
+        toScene: {
+            id: string;
+            title: string | null;
+        };
+    } & {
         id: string;
         orderIndex: number;
         label: string;
         fromSceneId: string;
         toSceneId: string;
-    }[]>;
+    })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         fromScene: {
             id: string;
+            projectId: string;
             title: string | null;
-            createdAt: Date;
-            updatedAt: Date;
             orderIndex: number;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            projectId: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
         toScene: {
             id: string;
+            projectId: string;
             title: string | null;
-            createdAt: Date;
-            updatedAt: Date;
             orderIndex: number;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            projectId: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;

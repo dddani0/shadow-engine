@@ -4,36 +4,36 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  //the local version of prisma is 6.0, which causes the puke error. IGNORE
   url      = env("DATABASE_URL")
 }
 
 model Project {
-  id           String     @id @default(cuid())
-  title        String
-  description  String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  scenes       Scene[]
-  toTimelineId String?    @unique
-  timeline     Timeline?  @relation("ProjectTimeline")
-  variables    Variable[]
-  saveSlots    SaveSlot[]
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  scenes      Scene[]
+  variables   Variable[]
+  saveSlots   SaveSlot[]
 }
 
 //Project scene
 model Scene {
-  id                    String                 @id @default(cuid())
-  projectId             String
-  project               Project                @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  title                 String?
-  orderIndex            Int                    @default(0)
-  metadata              Json? // background, characters on screen, audio cues
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
-  choicesFrom           Choice[]               @relation("FromScene")
-  choicesTo             Choice[]               @relation("ToScene")
-  saveSlots             SaveSlot[]
-  objectComponentGroups ObjectComponentGroup[] @relation("ObjectGroupFromScene")
+  id          String      @id @default(cuid())
+  projectId   String
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String?
+  orderIndex  Int         @default(0)
+  metadata    Json? // background, characters on screen, audio cues
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  choicesFrom Choice[]    @relation("FromScene")
+  choicesTo   Choice[]    @relation("ToScene")
+  saveSlots   SaveSlot[]
+  timeline    Timeline? //THis is dumb, but one to one relations in prisma require optionality :O
+  components  Component[]
 }
 
 model Choice {
@@ -48,33 +48,48 @@ model Choice {
 
 //Project timeline
 model Timeline {
-  id        String   @id @default(cuid())
-  projectId String   @unique
-  project   Project  @relation("ProjectTimeline", fields: [projectId], references: [id], onDelete: Cascade)
-  actions   Action[]
+  id      String   @id @default(cuid())
+  scene   Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId String   @unique
+  actions Action[]
 }
 
-//A group of components.
-model ObjectComponentGroup {
-  id               String            @id
-  fromSceneId      String
-  fromScene        Scene             @relation("ObjectGroupFromScene", fields: [fromSceneId], references: [id], onDelete: Cascade)
-  objectComponents ObjectComponent[] @relation("GroupComponents")
+//Component
+model Component {
+  id      String   @id @default(cuid())
+  title   String
+  scene   Scene    @relation(fields: [sceneId], references: [id])
+  sceneId String   @unique
+  //Sprite
+  sprite  Sprite?
+  //Textbox
+  textBox Textbox?
+  //Choice menu
 }
 
-//Component which is automatically paired to a group
-model ObjectComponent {
-  id                     String               @id
-  title                  String
-  objectComponentGroupId String
-  objectComponentGroup   ObjectComponentGroup @relation("GroupComponents", fields: [objectComponentGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+model Sprite {
+  id          String    @id @default(cuid())
+  path        String
+  component   Component @relation(fields: [componentId], references: [id])
+  componentId String    @unique
+}
+
+model Textbox {
+  id            String    @id @default(cuid())
+  title         String?
+  content       String[]
+  charPerSecond Int
+  component     Component @relation(fields: [componentId], references: [id])
+  componentId   String    @unique
 }
 
 //Action of the timeline
 model Action {
-  id         String    @id @default(cuid())
-  timeline   Timeline? @relation(fields: [timelineId], references: [id])
-  timelineId String?
+  id         String   @id @default(cuid())
+  type       String
+  timeline   Timeline @relation(fields: [timelineId], references: [id])
+  timelineId String   @unique
+  spriteId   String
 }
 
 //Variable of the project

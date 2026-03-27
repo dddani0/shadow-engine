@@ -16,6 +16,7 @@ export interface Scene {
   metadata: unknown | null;
   createdAt: string;
   updatedAt: string;
+  timeline: Timeline;
 }
 
 export interface Choice {
