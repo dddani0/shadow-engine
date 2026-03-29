@@ -4,8 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  //the local version of prisma is 6.0, which causes the puke error. IGNORE
-  url      = env("DATABASE_URL")
 }
 
 model Project {
