@@ -1,7 +1,5 @@
 export class CreateActionDto {
-  id?: string;
-  actions?: {
-    type: string;
-    spriteId?: string;
-  }[];
+  timelineId: string;
+  type: string;
+  spriteId?: string;
 }

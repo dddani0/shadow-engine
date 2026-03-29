@@ -45,7 +45,16 @@ export class ComponentService {
   }
 
   update(id: string, dto: UpdateComponentDto) {
-    const data: any = {};
+    const data: {
+      title?: string;
+      sceneId?: string;
+      sprite?: {
+        upsert: {
+          create: { path: string };
+          update: { path: string };
+        };
+      };
+    } = {};
     if (dto.title !== undefined) {
       data.title = dto.title;
     }
@@ -59,7 +68,7 @@ export class ComponentService {
             path: dto.sprite.path ?? '',
           },
           update: {
-            path: dto.sprite.path,
+            path: dto.sprite.path ?? '',
           },
         },
       };

@@ -1,6 +1,6 @@
 export class CreateTimelineDto {
-  id?: string;
-  actions?: {
+  id: string;
+  actions: {
     type: string;
     spriteId?: string;
   }[];

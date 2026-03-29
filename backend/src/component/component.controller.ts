@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UpdateComponentDto } from './dto/update-component.dto';
 
-@Controller('action')
+@Controller('components')
 export class ComponentController {
   constructor(private readonly componentService: ComponentService) {}
 

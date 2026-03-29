@@ -1,7 +1,11 @@
 export class UpdateTimelineDto {
   id?: string;
   actions?: {
-    type?: string;
-    spriteId?: string;
-  }[];
+    create?: Array<{ type: string; spriteId: string }>;
+    update?: Array<{
+      where: { id: string };
+      data: { type?: string; spriteId?: string };
+    }>;
+    delete?: Array<{ id: string }>;
+  };
 }
