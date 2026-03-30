@@ -1,8 +1,6 @@
 <div class="container-fluid">
-  @if (error()) {
-    <div class="alert danger-alert">{{ error() }}</div>
-  }
-  <div class="container-sm border p-3">
+  <div class="container border p-3">
+    <!-- Header -->
     <div class="container">
       <h1>Editor: {{ this.project()?.title }}</h1>
       <div class="btn-group">
@@ -12,26 +10,69 @@
         <button [disabled]="loading()" (click)="refresh()" type="button" class="btn btn-secondary">
           Refresh
         </button>
-        <button type="button" class="btn btn-secondary">Edit</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#editModal"
+        >
+          Edit
+        </button>
         <button type="button" class="btn btn-danger">Delete</button>
       </div>
     </div>
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page"> {{ this.scenes()[0].title }} </a>
-      </li>
-      @for (scene of this.scenes(); track $index) {
-        @if (!$first) {
-          <li class="nav-item">
-            <a class="nav-link"> {{ scene.title }} </a>
-          </li>
+    <!-- Modal for editing (scenes) -->
+    <div
+      class="modal fade"
+      id="editModal"
+      tabindex="-1"
+      aria-labelledby="Edit project"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="editModalLabel">Edit {{ this.project()?.title }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="project-name" class="col-form-label">Project name</label>
+                <input type="text" class="form-control" id="projectTitle" [value]="this.project()?.title">
+              </div>
+               <div class="mb-3">
+                <label for="project-name" class="col-form-label">Description</label>
+                <textarea class="form-control" id="projectTitle" [value]="this.project()?.description"></textarea>
+              </div>
+            </form>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Navbar (scenes) -->
+    <div class="container pt-3">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page"> {{ this.scenes()[0].title }} </a>
+        </li>
+        @for (scene of this.scenes(); track $index) {
+          @if (!$first) {
+            <li class="nav-item">
+              <a class="nav-link"> {{ scene.title }} </a>
+            </li>
+          }
         }
-      }
-      <li class="nav-item">
-        <a class="nav-link">+</a>
-      </li>
-    </ul>
-    <div class="container-fluid">
+        <li class="nav-item">
+          <a class="nav-link">+</a>
+        </li>
+      </ul>
+    </div>
+    <div class="container-fluid pt-3">
       <h1>Timeline</h1>
       <div class="dropdown">
         <button
