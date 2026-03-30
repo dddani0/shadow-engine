@@ -25,10 +25,6 @@ export class ProjectPage {
   readonly newSceneContent = signal('');
   readonly newSceneOrderIndex = signal(0);
 
-  // New Timeline form
-
-  // New action form
-
   // New choice form
   readonly choiceFromSceneId = signal<string>('');
   readonly choiceToSceneId = signal<string>('');
