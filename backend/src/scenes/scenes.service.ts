@@ -13,9 +13,20 @@ export class ScenesService {
       data: {
         projectId: dto.projectId,
         title: dto.title ?? null,
-        content: dto.content,
         orderIndex: dto.orderIndex ?? 0,
-        metadata: (dto.metadata ?? undefined) as unknown as Prisma.InputJsonValue,
+        metadata: (dto.metadata ??
+          undefined) as unknown as Prisma.InputJsonValue,
+        timeline: dto.timeline
+          ? {
+              create: {
+                actions: dto.timeline.actions
+                  ? {
+                      create: [],
+                    }
+                  : undefined,
+              },
+            }
+          : undefined,
       },
     });
   }
@@ -41,7 +52,6 @@ export class ScenesService {
       where: { id },
       data: {
         ...(dto.title !== undefined && { title: dto.title }),
-        ...(dto.content !== undefined && { content: dto.content }),
         ...(dto.orderIndex !== undefined && { orderIndex: dto.orderIndex }),
         ...(dto.metadata !== undefined && {
           metadata: dto.metadata as unknown as Prisma.InputJsonValue,

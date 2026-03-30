@@ -1,1 +1,1 @@
-{"version":3,"file":"update-scene.dto.js","sourceRoot":"","sources":["../../../../src/scenes/dto/update-scene.dto.ts"],"names":[],"mappings":";;;AAAA,MAAa,cAAc;IACzB,KAAK,CAAU;IACf,OAAO,CAAU;IACjB,UAAU,CAAU;IACpB,QAAQ,CAA2B;CACpC;AALD,wCAKC"}
+{"version":3,"file":"update-scene.dto.js","sourceRoot":"","sources":["../../../../src/scenes/dto/update-scene.dto.ts"],"names":[],"mappings":";;;AAEA,MAAa,cAAc;IACzB,KAAK,CAAU;IACf,UAAU,CAAU;IACpB,QAAQ,CAA2B;IACnC,SAAS,CAAa;IACtB,QAAQ,CAMN;CACH;AAZD,wCAYC"}

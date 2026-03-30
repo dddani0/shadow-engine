@@ -2,6 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
 import { Project } from '../../api/api-types';
+import { Scene } from '../../api/api-types';
+import { Timeline } from '../../api/api-types';
 
 @Component({
   selector: 'app-home-page',
@@ -18,6 +20,10 @@ export class HomePage {
 
   readonly newTitle = signal('');
   readonly newDescription = signal('');
+
+  readonly newScene = signal<Scene[] | null>(null);
+
+  readonly newTimeline = signal<Timeline | null>(null);
 
   readonly canCreate = computed(() => this.newTitle().trim().length > 0 && !this.loading());
 

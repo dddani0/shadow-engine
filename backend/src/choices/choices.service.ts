@@ -23,7 +23,7 @@ export class ChoicesService {
       where: { fromSceneId: sceneId },
       orderBy: { orderIndex: 'asc' },
       include: {
-        toScene: { select: { id: true, title: true, content: true } },
+        toScene: { select: { id: true, title: true } },
       },
     });
   }

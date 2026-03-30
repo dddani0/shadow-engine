@@ -32,7 +32,6 @@ let PlaybackService = class PlaybackService {
                 scene: {
                     id: scene.id,
                     title: scene.title,
-                    content: scene.content,
                     metadata: scene.metadata,
                     orderIndex: scene.orderIndex,
                 },
@@ -56,7 +55,6 @@ let PlaybackService = class PlaybackService {
             scene: {
                 id: firstScene.id,
                 title: firstScene.title,
-                content: firstScene.content,
                 metadata: firstScene.metadata,
                 orderIndex: firstScene.orderIndex,
             },

@@ -6,8 +6,7 @@ export declare class PlaybackService {
         scene: {
             id: string;
             title: string | null;
-            content: any;
-            metadata: import("@prisma/client/runtime/library").JsonValue;
+            metadata: import("@prisma/client/runtime/client").JsonValue;
             orderIndex: number;
         };
         choices: {

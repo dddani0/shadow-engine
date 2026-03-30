@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
-import { Choice, Project, Scene } from '../../api/api-types';
+import { Choice, Project, Scene, Timeline } from '../../api/api-types';
 
 @Component({
   selector: 'app-project-page',
@@ -48,18 +48,18 @@ export class ProjectPage {
     this.refresh();
   }
 
-  onTextInput(ev: Event): string {
-    return ((ev.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? '').toString();
+  onTextInput(event: Event): string {
+    return ((event.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? '').toString();
   }
 
-  onNumberInput(ev: Event): number {
-    const raw = (ev.target as HTMLInputElement | null)?.value ?? '0';
+  onNumberInput(event: Event): number {
+    const raw = (event.target as HTMLInputElement | null)?.value ?? '0';
     const n = Number(raw);
     return Number.isFinite(n) ? n : 0;
   }
 
-  onSelect(ev: Event): string {
-    return ((ev.target as HTMLSelectElement | null)?.value ?? '').toString();
+  onSelect(event: Event): string {
+    return ((event.target as HTMLSelectElement | null)?.value ?? '').toString();
   }
 
   getChoices(sceneId: string): Choice[] {
@@ -109,6 +109,13 @@ export class ProjectPage {
     });
   }
 
+  createTimeline() {
+    return {
+      id: "1",
+      actions: []
+    }
+  }
+
   createScene() {
     if (!this.canCreateScene()) return;
     this.loading.set(true);
@@ -118,6 +125,7 @@ export class ProjectPage {
         title: this.newSceneTitle().trim() || undefined,
         content: this.newSceneContent().trim(),
         orderIndex: Number(this.newSceneOrderIndex() ?? 0),
+        Timeline: this.createTimeline(),
       })
       .subscribe({
         next: () => {

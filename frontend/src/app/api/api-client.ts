@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Choice, PlaybackResponse, Project, Scene } from './api-types';
+import { Choice, PlaybackResponse, Project, Scene, Timeline } from './api-types';
 
 @Injectable({ providedIn: 'root' })
 export class ApiClient {
@@ -54,6 +54,7 @@ export class ApiClient {
     content: string;
     orderIndex?: number;
     metadata?: Record<string, unknown>;
+    Timeline: Timeline
   }): Observable<Scene> {
     return this.http.post<Scene>(`${this.baseUrl}/scenes`, body);
   }
@@ -65,6 +66,7 @@ export class ApiClient {
       content?: string;
       orderIndex?: number;
       metadata?: Record<string, unknown> | null;
+      Timeline?: Timeline
     },
   ): Observable<Scene> {
     return this.http.patch<Scene>(`${this.baseUrl}/scenes/${id}`, body);

@@ -7,21 +7,21 @@ export declare class ScenesService {
     constructor(prisma: PrismaService);
     create(dto: CreateSceneDto): Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
-        createdAt: Date;
-        updatedAt: Date;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+        createdAt: Date;
+        updatedAt: Date;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     findByProject(projectId: string): Prisma.PrismaPromise<{
         id: string;
+        projectId: string;
         title: string | null;
-        createdAt: Date;
-        updatedAt: Date;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
-        projectId: string;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     findOne(id: string): Prisma.Prisma__SceneClient<{
         choicesFrom: {
@@ -33,29 +33,29 @@ export declare class ScenesService {
         }[];
     } & {
         id: string;
+        projectId: string;
         title: string | null;
-        createdAt: Date;
-        updatedAt: Date;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+        createdAt: Date;
+        updatedAt: Date;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     update(id: string, dto: UpdateSceneDto): Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
-        createdAt: Date;
-        updatedAt: Date;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+        createdAt: Date;
+        updatedAt: Date;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     remove(id: string): Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
-        createdAt: Date;
-        updatedAt: Date;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+        createdAt: Date;
+        updatedAt: Date;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
 }

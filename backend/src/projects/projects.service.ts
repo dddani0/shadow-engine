@@ -12,6 +12,15 @@ export class ProjectsService {
       data: {
         title: dto.title,
         description: dto.description ?? null,
+        scenes: {
+          create: {
+            title: 'Test Scene',
+            orderIndex: 0,
+            timeline: {
+              create: {},
+            },
+          },
+        },
       },
     });
   }

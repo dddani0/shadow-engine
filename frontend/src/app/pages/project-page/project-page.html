@@ -1,151 +1,62 @@
 <div class="container-fluid">
-  <div class="container">
-    <h1>Editor</h1>
-    <div class="btnRow">
-      <a [routerLink]="['/play', projectId()]"><button class="primary">Play</button></a>
-      <button [disabled]="loading()" (click)="refresh()">Refresh</button>
-    </div>
-  </div>
-
   @if (error()) {
     <div class="alert danger-alert">{{ error() }}</div>
   }
-  <div class="container-fluid text-center">
-    <canvas class="bg-dark" style="width: 80%"> </canvas>
-  </div>
-  <div class="container">
-    <h1>Timeline</h1>
-  </div>
-  <div class="container">
-    <h1>Manage variables</h1>
-  </div>
-
-  <!-- <div class="grid">
-    <div class="card">
-      <h3 class="cardTitle">New scene</h3>
-
-      <div class="row">
-        <label>Title (optional)</label>
-        <input
-          [value]="newSceneTitle()"
-          (input)="newSceneTitle.set(onTextInput($event))"
-          placeholder="Scene title"
-        />
-      </div>
-
-      <div class="row">
-        <label>Order index</label>
-        <input
-          type="number"
-          [value]="newSceneOrderIndex()"
-          (input)="newSceneOrderIndex.set(onNumberInput($event))"
-        />
-      </div>
-
-      <div class="row">
-        <label>Content</label>
-        <textarea
-          [value]="newSceneContent()"
-          (input)="newSceneContent.set(onTextInput($event))"
-          placeholder="Dialogue / narrative text"
-        ></textarea>
-      </div>
-
-      <div class="btnRow">
-        <button class="primary" [disabled]="!canCreateScene()" (click)="createScene()">
-          Add scene
+  <div class="container-sm border p-3">
+    <div class="container">
+      <h1>Editor: {{ this.project()?.title }}</h1>
+      <div class="btn-group">
+        <button [routerLink]="['/play', projectId()]" type="button" class="btn btn-primary">
+          Play
         </button>
-      </div>
-
-      <hr style="border-color: rgba(231, 238, 252, 0.12); margin: 14px 0" />
-
-      <h3 class="cardTitle">New choice</h3>
-
-      <div class="row">
-        <label>From scene</label>
-        <select [value]="choiceFromSceneId()" (change)="choiceFromSceneId.set(onSelect($event))">
-          @for (s of scenes(); track s.id) {
-            <option [value]="s.id">{{ s.title ?? s.id }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="row">
-        <label>To scene</label>
-        <select [value]="choiceToSceneId()" (change)="choiceToSceneId.set(onSelect($event))">
-          @for (s of scenes(); track s.id) {
-            <option [value]="s.id">{{ s.title ?? s.id }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="row">
-        <label>Label</label>
-        <input
-          [value]="choiceLabel()"
-          (input)="choiceLabel.set(onTextInput($event))"
-          placeholder="Choice shown to player"
-        />
-      </div>
-
-      <div class="row">
-        <label>Order index</label>
-        <input
-          type="number"
-          [value]="choiceOrderIndex()"
-          (input)="choiceOrderIndex.set(onNumberInput($event))"
-        />
-      </div>
-
-      <div class="btnRow">
-        <button class="primary" [disabled]="!canCreateChoice()" (click)="createChoice()">
-          Add choice
+        <button [disabled]="loading()" (click)="refresh()" type="button" class="btn btn-secondary">
+          Refresh
         </button>
+        <button type="button" class="btn btn-secondary">Edit</button>
+        <button type="button" class="btn btn-danger">Delete</button>
       </div>
     </div>
-
-    <div class="card">
-      <h3 class="cardTitle">Scenes</h3>
-      @if (scenes().length === 0) {
-        <p class="muted">No scenes yet.</p>
-      } @else {
-        <div class="list">
-          @for (s of scenes(); track s.id) {
-            <div class="listItem" style="align-items: flex-start">
-              <div style="flex: 1">
-                <div style="display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap">
-                  <div style="font-weight: 650">{{ s.title ?? '(untitled scene)' }}</div>
-                  <div class="pill">order {{ s.orderIndex }}</div>
-                  <div class="pill">id {{ s.id }}</div>
-                </div>
-                <div class="muted" style="margin-top: 6px; white-space: pre-wrap">
-                  {{ s.content }}
-                </div>
-
-                @if (getChoices(s.id).length > 0) {
-                  <div style="margin-top: 10px">
-                    <div class="muted" style="margin-bottom: 6px">Choices</div>
-                    <div class="list" style="gap: 6px">
-                      @for (c of getChoices(s.id); track c.id) {
-                        <div class="listItem" style="padding: 8px 10px">
-                          <div>
-                            <div style="font-weight: 600">{{ c.label }}</div>
-                            <div class="muted">→ {{ c.toSceneId }}</div>
-                          </div>
-                          <button class="danger" (click)="deleteChoice(c.id)">Delete</button>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-              <div class="btnRow">
-                <button class="danger" (click)="deleteScene(s.id)">Delete</button>
-              </div>
-            </div>
-          }
-        </div>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page"> {{ this.scenes()[0].title }} </a>
+      </li>
+      @for (scene of this.scenes(); track $index) {
+        @if (!$first) {
+          <li class="nav-item">
+            <a class="nav-link"> {{ scene.title }} </a>
+          </li>
+        }
       }
+      <li class="nav-item">
+        <a class="nav-link">+</a>
+      </li>
+    </ul>
+    <div class="container-fluid">
+      <h1>Timeline</h1>
+      <div class="dropdown">
+        <button
+          type="button"
+          class="btn btn-secondary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Add Action
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Enable sprite</a></li>
+          <li><a class="dropdown-item" href="#">Disable sprite</a></li>
+          <li><a class="dropdown-item" href="#">Enable textbox</a></li>
+          <li><a class="dropdown-item" href="#">Disable textbox</a></li>
+          <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
+          <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
+        </ul>
+      </div>
     </div>
-  </div> -->
+    <div class="container pt-3">
+      <button class="btn btn-secondary">Variable</button>
+      <button class="btn btn-secondary">Rename</button>
+      <button class="btn btn-danger">Delete</button>
+    </div>
+  </div>
+  <div class="container text-center"></div>
 </div>
