@@ -1,52 +1,77 @@
 <div class="container-fluid">
-  <div class="container-sm">
-    <h1>Welcome to Shadow Engine</h1>
-  </div>
-
+  <!-- new project button(scenes) -->
   <div class="container">
-    <div class="row">
-      <h3 class="cardTitle">Create project</h3>
-
-      <div class="row">
-        <div class="form-floating">
-          <input
-            class="form-control"
-            id="floatingTextarea"
-            [value]="newTitle()"
-            (input)="newTitle.set(onTextInput($event))"
-            placeholder="Project title"
-          />
-          <label for="floatInTextarea">Title</label>
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#newProjectModal"
+    >
+      New project
+    </button>
+  </div>
+  <div
+    class="modal fade"
+    id="newProjectModal"
+    tabindex="-1"
+    aria-labelledby="Edit project"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editModalLabel">Create project</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="project-name" class="col-form-label">Project name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="projectTitle"
+                placeholder="title"
+                [value]="newTitle()"
+                (input)="newTitle.set(onTextInput($event))"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="project-name" class="col-form-label">Description</label>
+              <textarea
+                class="form-control"
+                id="projectDescription"
+                placeholder="description"
+                [value]="newDescription()"
+                (input)="newDescription.set(onTextInput($event))"
+              ></textarea>
+              @if (error()) {
+                <div class="alert alert-danger">{{ error() }}</div>
+              }
+            </div>
+          </form>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              [disabled]="!canCreate()"
+              (click)="createProject()"
+            >
+              Create
+            </button>
+          </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="form-floating">
-          <textarea
-            class="form-control"
-            style="height: 100px"
-            id="floatinTextarea2"
-            [value]="newDescription()"
-            (input)="newDescription.set(onTextInput($event))"
-            placeholder="Description"
-          ></textarea>
-          <label for="floatinTextarea2">Description</label>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="container">
-          <button class="primary" [disabled]="!canCreate()" (click)="createProject()">
-            Create
-          </button>
-        </div>
-      </div>
-
-      @if (error()) {
-        <div class="alert alert-danger">{{ error() }}</div>
-      }
     </div>
-
+  </div>
+  <div class="container">
     <div class="container">
       <div class="row">
         <h3>Recent projects</h3>
