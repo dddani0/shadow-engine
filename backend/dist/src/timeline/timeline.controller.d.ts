@@ -16,7 +16,7 @@ export declare class TimelineController {
         actions: {
             id: string;
             type: string;
-            spriteId: string;
+            spriteId: string | null;
             timelineId: string;
         }[];
     } & {

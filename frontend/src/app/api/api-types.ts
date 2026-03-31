@@ -5,13 +5,14 @@ export interface Project {
   scenes: Scene[];
   createdAt: string;
   updatedAt: string;
+  startSceneId: string;
 }
 
 export interface Scene {
   id: string;
   projectId: string;
   title: string | null;
-  componentGroups: ObjectComponentGroup[];
+  components: Component[];
   orderIndex: number;
   metadata: unknown | null;
   createdAt: string;
@@ -48,16 +49,21 @@ export interface Sprite {
   path: string;
 }
 
-export interface ObjectComponentGroup {
+export interface Textbox {
   id: string;
-  objects: ObjectComponent[];
 }
 
-export interface ObjectComponent {
+export interface Component {
   id: string;
+  sceneId: String;
   title: String;
+  sprite?: Sprite;
+  textBox?: Textbox;
 }
 
 export interface Action {
   id: string;
+  type: string;
+  timelineId: string;
+  spriteId?: string;
 }

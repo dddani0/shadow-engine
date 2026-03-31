@@ -1,1 +1,1 @@
-{"version":3,"file":"create-project.dto.js","sourceRoot":"","sources":["../../../../src/projects/dto/create-project.dto.ts"],"names":[],"mappings":";;;AAEA,MAAa,gBAAgB;IAC3B,KAAK,CAAS;IACd,WAAW,CAAU;IACrB,MAAM,CAAU;CACjB;AAJD,4CAIC"}
+{"version":3,"file":"create-project.dto.js","sourceRoot":"","sources":["../../../../src/projects/dto/create-project.dto.ts"],"names":[],"mappings":";;;AAEA,MAAa,gBAAgB;IAC3B,KAAK,CAAS;IACd,WAAW,CAAU;IACrB,MAAM,CAAU;IAChB,YAAY,CAAS;CACtB;AALD,4CAKC"}

@@ -5,6 +5,7 @@ class CreateProjectDto {
     title;
     description;
     scenes;
+    startSceneId;
 }
 exports.CreateProjectDto = CreateProjectDto;
 //# sourceMappingURL=create-project.dto.js.map

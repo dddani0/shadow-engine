@@ -24,13 +24,14 @@ let ProjectsService = class ProjectsService {
                 description: dto.description ?? null,
                 scenes: {
                     create: {
-                        title: 'Test Scene',
+                        title: 'Init Scene',
                         orderIndex: 0,
                         timeline: {
                             create: {},
                         },
                     },
                 },
+                startSceneId: dto.startSceneId,
             },
         });
     }

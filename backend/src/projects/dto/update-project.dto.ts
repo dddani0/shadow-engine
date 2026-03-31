@@ -4,4 +4,5 @@ export class UpdateProjectDto {
   title?: string;
   description?: string;
   scenes?: Scene[];
+  startSceneId?: string;
 }

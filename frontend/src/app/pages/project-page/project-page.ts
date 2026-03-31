@@ -1,3 +1,4 @@
+import { Action } from './../../api/api-types';
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
@@ -15,6 +16,7 @@ export class ProjectPage {
   readonly projectId = signal<string>('');
   readonly project = signal<Project | null>(null);
   readonly scenes = signal<Scene[]>([]);
+  readonly startSceneId = signal<String>('');
   readonly choicesForScene = signal<Record<string, Choice[]>>({});
 
   readonly loading = signal(false);
@@ -49,7 +51,9 @@ export class ProjectPage {
   }
 
   onTextInput(event: Event): string {
-    return ((event.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? '').toString();
+    return (
+      (event.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? ''
+    ).toString();
   }
 
   onNumberInput(event: Event): number {
@@ -66,12 +70,26 @@ export class ProjectPage {
     return this.choicesForScene()[sceneId] ?? [];
   }
 
+  loadStartSceneId() {
+    const project = this.project();
+    const scenes = this.scenes();
+
+    if (project && scenes.length > 0 && !project.startSceneId) {
+      project.startSceneId = scenes[0].id;
+      this.startSceneId.set(project.startSceneId);
+      this.api.updateProject(this.projectId(), project).subscribe();
+      console.log(project);
+    }
+  }
+
   refresh() {
     const projectId = this.projectId();
     this.loading.set(true);
     this.error.set(null);
     this.api.getProject(projectId).subscribe({
-      next: (p) => this.project.set(p),
+      next: (p) => {
+        this.project.set(p);
+      },
       error: (e) => {
         this.error.set(this.formatError(e));
         this.loading.set(false);
@@ -81,6 +99,7 @@ export class ProjectPage {
     this.api.listScenes(projectId).subscribe({
       next: (sc) => {
         this.scenes.set(sc);
+        this.loadStartSceneId();
         if (this.choiceFromSceneId() === '' && sc.length > 0) {
           this.choiceFromSceneId.set(sc[0]!.id);
         }
@@ -109,13 +128,6 @@ export class ProjectPage {
     });
   }
 
-  createTimeline() {
-    return {
-      id: "1",
-      actions: []
-    }
-  }
-
   createScene() {
     if (!this.canCreateScene()) return;
     this.loading.set(true);
@@ -125,7 +137,9 @@ export class ProjectPage {
         title: this.newSceneTitle().trim() || undefined,
         content: this.newSceneContent().trim(),
         orderIndex: Number(this.newSceneOrderIndex() ?? 0),
-        Timeline: this.createTimeline(),
+        Timeline: {
+          actions: [],
+        },
       })
       .subscribe({
         next: () => {
@@ -139,6 +153,20 @@ export class ProjectPage {
           this.loading.set(false);
         },
       });
+  }
+
+  createAction(type: string, sceneId: string) {
+    switch (type) {
+      case 'EnableSprite':
+        console.log('pressd enableSprite');
+        const newAction: Action = {
+          id: '',
+          type: type,
+          timelineId: '',
+        };
+        this.scenes()[sceneId as unknown as number].timeline.actions.push(newAction);
+        break;
+    }
   }
 
   deleteScene(sceneId: string) {
@@ -193,4 +221,3 @@ export class ProjectPage {
     return `API error${maybe?.status ? ` (${maybe.status})` : ''}: ${maybe?.message ?? 'Unknown'}`;
   }
 }
-
