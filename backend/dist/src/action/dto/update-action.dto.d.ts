@@ -1,7 +1,5 @@
 export declare class UpdateActionDto {
-    id?: string;
-    actions?: {
-        type?: string;
-        spriteId?: string;
-    }[];
+    timelineId?: string;
+    type?: string;
+    componentId?: string;
 }

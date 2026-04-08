@@ -28,7 +28,11 @@ export class ScenesService {
     return this.prisma.scene.findMany({
       where: { projectId },
       orderBy: { orderIndex: 'asc' },
-      include: { timeline: true },
+      include: {
+        timeline: {
+          include: { actions: true },
+        },
+      },
     });
   }
 
@@ -37,7 +41,11 @@ export class ScenesService {
       where: { id },
       include: {
         choicesFrom: { orderBy: { orderIndex: 'asc' } },
-        timeline: true,
+        timeline: {
+          include: {
+            actions: true,
+          },
+        },
       },
     });
   }

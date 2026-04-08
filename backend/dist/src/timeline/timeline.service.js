@@ -31,7 +31,7 @@ let TimelineService = class TimelineService {
         return this.prisma.timeline.findUniqueOrThrow({
             where: { id },
             include: {
-                actions: {},
+                actions: true,
             },
         });
     }

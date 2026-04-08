@@ -36,7 +36,11 @@ let ScenesService = class ScenesService {
         return this.prisma.scene.findMany({
             where: { projectId },
             orderBy: { orderIndex: 'asc' },
-            include: { timeline: true },
+            include: {
+                timeline: {
+                    include: { actions: true },
+                },
+            },
         });
     }
     findOne(id) {
@@ -44,7 +48,11 @@ let ScenesService = class ScenesService {
             where: { id },
             include: {
                 choicesFrom: { orderBy: { orderIndex: 'asc' } },
-                timeline: true,
+                timeline: {
+                    include: {
+                        actions: true,
+                    },
+                },
             },
         });
     }

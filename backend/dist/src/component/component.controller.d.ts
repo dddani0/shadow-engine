@@ -4,11 +4,11 @@ import { UpdateComponentDto } from './dto/update-component.dto';
 export declare class ComponentController {
     private readonly componentService;
     constructor(componentService: ComponentService);
-    create(dto: CreateComponentDto): import("@prisma/client").Prisma.Prisma__ComponentClient<{
+    create(dto: CreateComponentDto): Promise<{
         id: string;
         title: string;
         sceneId: string;
-    }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    }>;
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         scene: {
             id: string;
@@ -22,7 +22,7 @@ export declare class ComponentController {
         sprite: {
             path: string;
             id: string;
-            componentId: string;
+            componentId: string | null;
         } | null;
         textBox: {
             id: string;
@@ -49,7 +49,7 @@ export declare class ComponentController {
         sprite: {
             path: string;
             id: string;
-            componentId: string;
+            componentId: string | null;
         } | null;
         textBox: {
             id: string;
@@ -76,7 +76,7 @@ export declare class ComponentController {
         sprite: {
             path: string;
             id: string;
-            componentId: string;
+            componentId: string | null;
         } | null;
         textBox: {
             id: string;

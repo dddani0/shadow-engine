@@ -4,7 +4,7 @@ exports.CreateActionDto = void 0;
 class CreateActionDto {
     timelineId;
     type;
-    spriteId;
+    componentId;
 }
 exports.CreateActionDto = CreateActionDto;
 //# sourceMappingURL=create-action.dto.js.map
