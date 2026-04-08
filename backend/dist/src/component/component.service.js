@@ -20,7 +20,7 @@ let ComponentService = class ComponentService {
     create(dto) {
         return this.prisma.component.create({
             data: {
-                title: dto.title,
+                title: dto.title ?? 'Untitled Component',
                 sceneId: dto.sceneId,
                 sprite: dto.sprite
                     ? {

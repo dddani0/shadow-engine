@@ -6,6 +6,11 @@ export declare class ScenesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(dto: CreateSceneDto): Prisma.Prisma__SceneClient<{
+        timeline: {
+            id: string;
+            sceneId: string;
+        } | null;
+    } & {
         id: string;
         projectId: string;
         title: string | null;
@@ -14,7 +19,12 @@ export declare class ScenesService {
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
-    findByProject(projectId: string): Prisma.PrismaPromise<{
+    findByProject(projectId: string): Prisma.PrismaPromise<({
+        timeline: {
+            id: string;
+            sceneId: string;
+        } | null;
+    } & {
         id: string;
         projectId: string;
         title: string | null;
@@ -22,14 +32,18 @@ export declare class ScenesService {
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-    }[]>;
+    })[]>;
     findOne(id: string): Prisma.Prisma__SceneClient<{
+        timeline: {
+            id: string;
+            sceneId: string;
+        } | null;
         choicesFrom: {
             id: string;
             orderIndex: number;
-            label: string;
             fromSceneId: string;
             toSceneId: string;
+            label: string;
         }[];
     } & {
         id: string;

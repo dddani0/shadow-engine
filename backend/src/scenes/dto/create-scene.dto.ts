@@ -5,11 +5,4 @@ export class CreateSceneDto {
   orderIndex?: number;
   metadata?: Record<string, unknown>;
   objectComponentGroups?: Component[];
-  timeline?: {
-    id?: string;
-    actions?: {
-      type: string;
-      spriteId: string;
-    }[];
-  };
 }

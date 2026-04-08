@@ -75,7 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TimelineController.prototype, "remove", null);
 exports.TimelineController = TimelineController = __decorate([
-    (0, common_1.Controller)('timeline'),
+    (0, common_1.Controller)('timelines'),
     __metadata("design:paramtypes", [timeline_service_1.TimelineService])
 ], TimelineController);
 //# sourceMappingURL=timeline.controller.js.map

@@ -33,17 +33,31 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="editModalLabel">Edit {{ this.project()?.title }}</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body">
             <form>
               <div class="mb-3">
                 <label for="project-name" class="col-form-label">Project name</label>
-                <input type="text" class="form-control" id="projectTitle" [value]="this.project()?.title">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="projectTitle"
+                  [value]="this.project()?.title"
+                />
               </div>
-               <div class="mb-3">
+              <div class="mb-3">
                 <label for="project-name" class="col-form-label">Description</label>
-                <textarea class="form-control" id="projectDescription" [value]="this.project()?.description"></textarea>
+                <textarea
+                  class="form-control"
+                  id="projectDescription"
+                  [value]="this.project()?.description"
+                ></textarea>
               </div>
             </form>
             <div class="modal-footer">
@@ -57,40 +71,50 @@
     <!-- Navbar (scenes) -->
     <div class="container pt-3">
       <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" [id]="this.startSceneId()"> {{ this.scenes().find((s) => s.id === this.startSceneId())?.title }} </a>
-        </li>
         @for (scene of this.scenes(); track $index) {
-          @if (!$first) {
-            <li class="nav-item" [id]="scene.id">
+          <li class="nav-item" [id]="scene.id">
+            @if (scene === activeScene()) {
+              <a class="nav-link active" aria-current="page"> {{ scene.title }} </a>
+            } @else {
               <a class="nav-link"> {{ scene.title }} </a>
-            </li>
-          }
+            }
+          </li>
         }
         <li class="nav-item">
-          <a class="nav-link">+</a>
+          <a class="nav-link" (click)="this.createScene()">+</a>
         </li>
       </ul>
     </div>
     <div class="container-fluid pt-3">
       <h1>Timeline</h1>
-      <div class="dropdown">
-        <button
-          type="button"
-          class="btn btn-secondary dropdown-toggle"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Add Action
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" (click)="this.createAction('EnableSprite', '0')">Enable sprite</a></li>
-          <li><a class="dropdown-item" href="#">Disable sprite</a></li>
-          <li><a class="dropdown-item" href="#">Enable textbox</a></li>
-          <li><a class="dropdown-item" href="#">Disable textbox</a></li>
-          <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
-          <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
-        </ul>
+      <div class="d-flex">
+        @for (action of this.activeScene()?.timeline?.actions; track $index) {
+          <div class="card">
+            <div class="card-header">
+              {{ action.type }}
+            </div>
+          </div>
+        }
+        <div class="dropdown">
+          <button
+            type="button"
+            class="btn btn-secondary dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Add Action
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" (click)="this.createAction('EnableSprite')">Enable sprite</a>
+            </li>
+            <li><a class="dropdown-item" href="#">Disable sprite</a></li>
+            <li><a class="dropdown-item" href="#">Enable textbox</a></li>
+            <li><a class="dropdown-item" href="#">Disable textbox</a></li>
+            <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
+            <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="container pt-3">

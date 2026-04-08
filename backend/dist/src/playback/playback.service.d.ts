@@ -11,8 +11,8 @@ export declare class PlaybackService {
         };
         choices: {
             id: string;
-            label: string;
             toSceneId: string;
+            label: string;
         }[];
     } | {
         scene: null;

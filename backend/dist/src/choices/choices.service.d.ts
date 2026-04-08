@@ -7,9 +7,9 @@ export declare class ChoicesService {
     create(dto: CreateChoiceDto): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
+        label: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findByScene(sceneId: string): import("@prisma/client").Prisma.PrismaPromise<({
         toScene: {
@@ -19,9 +19,9 @@ export declare class ChoicesService {
     } & {
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
+        label: string;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         fromScene: {
@@ -45,22 +45,22 @@ export declare class ChoicesService {
     } & {
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
+        label: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, dto: UpdateChoiceDto): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
+        label: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
+        label: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }

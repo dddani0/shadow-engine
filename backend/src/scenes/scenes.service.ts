@@ -16,18 +16,11 @@ export class ScenesService {
         orderIndex: dto.orderIndex ?? 0,
         metadata: (dto.metadata ??
           undefined) as unknown as Prisma.InputJsonValue,
-        timeline: dto.timeline
-          ? {
-              create: {
-                actions: dto.timeline.actions
-                  ? {
-                      create: [],
-                    }
-                  : undefined,
-              },
-            }
-          : undefined,
+        timeline: {
+          create: {},
+        },
       },
+      include: { timeline: true },
     });
   }
 
@@ -35,6 +28,7 @@ export class ScenesService {
     return this.prisma.scene.findMany({
       where: { projectId },
       orderBy: { orderIndex: 'asc' },
+      include: { timeline: true },
     });
   }
 
@@ -43,6 +37,7 @@ export class ScenesService {
       where: { id },
       include: {
         choicesFrom: { orderBy: { orderIndex: 'asc' } },
+        timeline: true,
       },
     });
   }

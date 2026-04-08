@@ -44,7 +44,10 @@ let ProjectsService = class ProjectsService {
         return this.prisma.project.findUniqueOrThrow({
             where: { id },
             include: {
-                scenes: { orderBy: { orderIndex: 'asc' } },
+                scenes: {
+                    orderBy: { orderIndex: 'asc' },
+                    include: { timeline: true },
+                },
             },
         });
     }
@@ -54,6 +57,7 @@ let ProjectsService = class ProjectsService {
             data: {
                 ...(dto.title != null && { title: dto.title }),
                 ...(dto.description !== undefined && { description: dto.description }),
+                ...(dto.startSceneId != null && { startSceneId: dto.startSceneId }),
             },
         });
     }

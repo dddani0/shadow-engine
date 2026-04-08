@@ -7,7 +7,6 @@ class CreateSceneDto {
     orderIndex;
     metadata;
     objectComponentGroups;
-    timeline;
 }
 exports.CreateSceneDto = CreateSceneDto;
 //# sourceMappingURL=create-scene.dto.js.map

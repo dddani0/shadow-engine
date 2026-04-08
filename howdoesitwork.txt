@@ -1,0 +1,14 @@
+Backend:
+- NestJS szerver port 3000 indul. Ez egy szerver, ami hosztolja az API-t.
+- NestJS modulokba rendszerezi az applikációt: Projekt modul, Jelenet modul, stb. Minden modul három részből áll: Controller (vezérlő), Service és DTO:
+	- Vezérlő -> Feldolgozza a HTTP kérelmeket.
+	- Service -> Kommunikál a Prismával, vagyis az adatbázissal.
+	- DTO -> Meghatározza a kommunikációban szereplő adat tipusát.
+Ha például létrehozunk egy új projektet a backend-el:
+1. HTTP POST request: /api/projects.
+2. ProjectController.create -> ProjectService.create -> prisma.project.create -> postgresql database
+3. Visszatér egy json formátumban.
+
+Backend:
+- Angular magába foglalja a Bootstrap stílust. Alapvetően 4200 porton fut az Angular, amivel kommunikálhatunk a backend szerverrel.
+- A proxy (a konfigurációval) átirányítja a kéréseket 4200-ról 3000-re. Az Angular HTTPClient kliens http kéréseket küld a proxizott backend számára.

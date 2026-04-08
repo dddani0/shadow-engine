@@ -25,24 +25,18 @@ let ScenesService = class ScenesService {
                 orderIndex: dto.orderIndex ?? 0,
                 metadata: (dto.metadata ??
                     undefined),
-                timeline: dto.timeline
-                    ? {
-                        create: {
-                            actions: dto.timeline.actions
-                                ? {
-                                    create: [],
-                                }
-                                : undefined,
-                        },
-                    }
-                    : undefined,
+                timeline: {
+                    create: {},
+                },
             },
+            include: { timeline: true },
         });
     }
     findByProject(projectId) {
         return this.prisma.scene.findMany({
             where: { projectId },
             orderBy: { orderIndex: 'asc' },
+            include: { timeline: true },
         });
     }
     findOne(id) {
@@ -50,6 +44,7 @@ let ScenesService = class ScenesService {
             where: { id },
             include: {
                 choicesFrom: { orderBy: { orderIndex: 'asc' } },
+                timeline: true,
             },
         });
     }

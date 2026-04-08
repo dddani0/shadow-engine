@@ -55,10 +55,10 @@ export class HomePage {
         description: this.newDescription().trim() || undefined,
       })
       .subscribe({
-        next: async (p) => {
+        next: async (project) => {
           this.newTitle.set('');
           this.newDescription.set('');
-          await this.router.navigate(['/projects', p.id]);
+          await this.router.navigate(['/projects', project.id]);
         },
         error: (e) => {
           this.error.set(this.formatError(e));
