@@ -7,63 +7,60 @@ export declare class ChoicesController {
     create(dto: CreateChoiceDto): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+        label: string;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findByScene(sceneId: string): import("@prisma/client").Prisma.PrismaPromise<({
         toScene: {
             id: string;
             title: string | null;
-            content: string;
         };
     } & {
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
+        label: string;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         fromScene: {
             id: string;
+            projectId: string;
             title: string | null;
+            orderIndex: number;
+            metadata: import("@prisma/client/runtime/client").JsonValue | null;
             createdAt: Date;
             updatedAt: Date;
-            orderIndex: number;
-            content: string;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            projectId: string;
         };
         toScene: {
             id: string;
+            projectId: string;
             title: string | null;
+            orderIndex: number;
+            metadata: import("@prisma/client/runtime/client").JsonValue | null;
             createdAt: Date;
             updatedAt: Date;
-            orderIndex: number;
-            content: string;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            projectId: string;
         };
     } & {
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+        label: string;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, dto: UpdateChoiceDto): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+        label: string;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__ChoiceClient<{
         id: string;
         orderIndex: number;
-        label: string;
         fromSceneId: string;
         toSceneId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+        label: string;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }

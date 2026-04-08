@@ -16,6 +16,9 @@ const projects_module_1 = require("./projects/projects.module");
 const scenes_module_1 = require("./scenes/scenes.module");
 const choices_module_1 = require("./choices/choices.module");
 const playback_module_1 = require("./playback/playback.module");
+const component_module_1 = require("./component/component.module");
+const timeline_module_1 = require("./timeline/timeline.module");
+const action_module_1 = require("./action/action.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,6 +31,9 @@ exports.AppModule = AppModule = __decorate([
             scenes_module_1.ScenesModule,
             choices_module_1.ChoicesModule,
             playback_module_1.PlaybackModule,
+            component_module_1.ComponentModule,
+            timeline_module_1.TimelineModule,
+            action_module_1.ActionModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

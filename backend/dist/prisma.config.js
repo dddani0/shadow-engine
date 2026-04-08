@@ -8,8 +8,7 @@ exports.default = (0, config_1.defineConfig)({
         path: 'prisma/migrations',
     },
     datasource: {
-        url: process.env['DATABASE_URL'] ??
-            'postgresql://postgres:postgres@localhost:5432/visual_novel',
+        url: process.env['DATABASE_URL'],
     },
 });
 //# sourceMappingURL=prisma.config.js.map

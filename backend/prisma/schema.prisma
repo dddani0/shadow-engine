@@ -4,54 +4,104 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model Project {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  scenes      Scene[]
-  variables   Variable[]
-  saveSlots   SaveSlot[]
+  id           String     @id @default(cuid())
+  title        String
+  description  String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  scenes       Scene[]
+  variables    Variable[]
+  saveSlots    SaveSlot[]
+  startSceneId String?
 }
 
+//Project scene
 model Scene {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
   projectId   String
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   title       String?
-  content     String   // dialogue / narrative text
-  orderIndex  Int      @default(0) // sequence within project
-  metadata    Json?    // background, characters on screen, audio cues
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  choicesFrom Choice[] @relation("FromScene")
-  choicesTo   Choice[] @relation("ToScene")
+  orderIndex  Int         @default(0)
+  metadata    Json? // background, characters on screen, audio cues
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  choicesFrom Choice[]    @relation("FromScene")
+  choicesTo   Choice[]    @relation("ToScene")
   saveSlots   SaveSlot[]
+  timeline    Timeline? //THis is dumb, but one to one relations in prisma require optionality :O
+  components  Component[]
 }
 
 model Choice {
-  id         String  @id @default(cuid())
-  fromSceneId String
-  fromScene  Scene   @relation("FromScene", fields: [fromSceneId], references: [id], onDelete: Cascade)
-  toSceneId  String
-  toScene   Scene   @relation("ToScene", fields: [toSceneId], references: [id], onDelete: Cascade)
-  label     String  // option text shown to player
-  orderIndex Int    @default(0)
+  id          String @id @default(cuid())
+  fromSceneId String @unique
+  fromScene   Scene  @relation("FromScene", fields: [fromSceneId], references: [id], onDelete: Cascade)
+  toSceneId   String @unique
+  toScene     Scene  @relation("ToScene", fields: [toSceneId], references: [id], onDelete: Cascade)
+  label       String // option text shown to player
+  orderIndex  Int    @default(0)
 }
 
+//Project timeline
+model Timeline {
+  id      String   @id @default(cuid())
+  scene   Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId String   @unique
+  actions Action[]
+}
+
+//Component
+model Component {
+  id      String   @id @default(cuid())
+  title   String
+  scene   Scene    @relation(fields: [sceneId], references: [id])
+  sceneId String   @unique
+  //Sprite
+  sprite  Sprite?
+  //Textbox
+  textBox Textbox?
+  //Choice menu
+}
+
+model Sprite {
+  id          String    @id @default(cuid())
+  path        String
+  component   Component @relation(fields: [componentId], references: [id])
+  componentId String    @unique
+}
+
+model Textbox {
+  id            String    @id @default(cuid())
+  title         String?
+  content       String[]
+  charPerSecond Int
+  component     Component @relation(fields: [componentId], references: [id])
+  componentId   String    @unique
+}
+
+//Action of the timeline
+model Action {
+  id         String   @id @default(cuid())
+  type       String
+  timeline   Timeline @relation(fields: [timelineId], references: [id])
+  timelineId String   @unique
+  spriteId   String?
+}
+
+//Variable of the project
 model Variable {
   id        String   @id @default(cuid())
   projectId String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  name      String   // e.g. "playerName", "ending_unlocked"
-  value     String   // stored as string; app can interpret as number/boolean
+  name      String
+  value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@unique([projectId, name])
+
+  @@unique([projectId, name]) //The combination has to be unique
 }
 
 model SaveSlot {
@@ -60,8 +110,9 @@ model SaveSlot {
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   sceneId   String
   scene     Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
-  slotIndex Int      // 1-based slot number
-  stateJson String?  // snapshot of variables/flags as JSON
+  slotIndex Int // 1-based slot number
+  stateJson String? // snapshot of variables/flags as JSON
   createdAt DateTime @default(now())
+
   @@unique([projectId, slotIndex])
 }

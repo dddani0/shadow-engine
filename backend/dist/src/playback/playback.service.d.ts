@@ -6,14 +6,13 @@ export declare class PlaybackService {
         scene: {
             id: string;
             title: string | null;
-            content: string;
-            metadata: import("@prisma/client/runtime/library").JsonValue;
+            metadata: import("@prisma/client/runtime/client").JsonValue;
             orderIndex: number;
         };
         choices: {
             id: string;
-            label: string;
             toSceneId: string;
+            label: string;
         }[];
     } | {
         scene: null;

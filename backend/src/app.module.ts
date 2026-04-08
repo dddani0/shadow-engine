@@ -7,6 +7,9 @@ import { ProjectsModule } from './projects/projects.module';
 import { ScenesModule } from './scenes/scenes.module';
 import { ChoicesModule } from './choices/choices.module';
 import { PlaybackModule } from './playback/playback.module';
+import { ComponentModule } from './component/component.module';
+import { TimelineModule } from './timeline/timeline.module';
+import { ActionModule } from './action/action.module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { PlaybackModule } from './playback/playback.module';
     ScenesModule,
     ChoicesModule,
     PlaybackModule,
+    ComponentModule,
+    TimelineModule,
+    ActionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

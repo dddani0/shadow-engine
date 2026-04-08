@@ -6,61 +6,70 @@ export declare class ScenesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(dto: CreateSceneDto): Prisma.Prisma__SceneClient<{
+        timeline: {
+            id: string;
+            sceneId: string;
+        } | null;
+    } & {
         id: string;
+        projectId: string;
         title: string | null;
+        orderIndex: number;
+        metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        orderIndex: number;
-        content: string;
-        metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
-    findByProject(projectId: string): Prisma.PrismaPromise<{
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
+    findByProject(projectId: string): Prisma.PrismaPromise<({
+        timeline: {
+            id: string;
+            sceneId: string;
+        } | null;
+    } & {
         id: string;
+        projectId: string;
         title: string | null;
+        orderIndex: number;
+        metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        orderIndex: number;
-        content: string;
-        metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }[]>;
+    })[]>;
     findOne(id: string): Prisma.Prisma__SceneClient<{
+        timeline: {
+            id: string;
+            sceneId: string;
+        } | null;
         choicesFrom: {
             id: string;
             orderIndex: number;
-            label: string;
             fromSceneId: string;
             toSceneId: string;
+            label: string;
         }[];
     } & {
         id: string;
+        projectId: string;
         title: string | null;
+        orderIndex: number;
+        metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        orderIndex: number;
-        content: string;
-        metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     update(id: string, dto: UpdateSceneDto): Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
+        orderIndex: number;
+        metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        orderIndex: number;
-        content: string;
-        metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     remove(id: string): Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
+        orderIndex: number;
+        metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        orderIndex: number;
-        content: string;
-        metadata: Prisma.JsonValue | null;
-        projectId: string;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, Prisma.PrismaClientOptions>;
+    }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
 }

@@ -12,6 +12,16 @@ export class ProjectsService {
       data: {
         title: dto.title,
         description: dto.description ?? null,
+        scenes: {
+          create: {
+            title: 'Init Scene',
+            orderIndex: 0,
+            timeline: {
+              create: {},
+            },
+          },
+        },
+        startSceneId: dto.startSceneId,
       },
     });
   }
@@ -26,7 +36,10 @@ export class ProjectsService {
     return this.prisma.project.findUniqueOrThrow({
       where: { id },
       include: {
-        scenes: { orderBy: { orderIndex: 'asc' } },
+        scenes: {
+          orderBy: { orderIndex: 'asc' },
+          include: { timeline: true },
+        },
       },
     });
   }
@@ -37,6 +50,7 @@ export class ProjectsService {
       data: {
         ...(dto.title != null && { title: dto.title }),
         ...(dto.description !== undefined && { description: dto.description }),
+        ...(dto.startSceneId != null && { startSceneId: dto.startSceneId }),
       },
     });
   }
