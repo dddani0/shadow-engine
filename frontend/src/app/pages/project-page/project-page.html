@@ -86,34 +86,46 @@
       </ul>
     </div>
     <div class="container-fluid pt-3">
-      <h1>Timeline</h1>
+      <h2>Timeline</h2>
       <div class="d-flex">
         @for (action of this.activeSceneTimeline()?.actions; track $index) {
-          <div class="card">
-            <div class="card-header">
-              {{ action.type }}
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">{{ $index + 1 }}. Action</h5>
+              <p class="card-text">{{ action.type }}</p>
+              <div class="btn-group" role="group" aria-label="mixed style">
+                <button type="button" class="btn btn-primary">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+              </div>
             </div>
           </div>
         }
-        <div class="dropdown">
-          <button
-            type="button"
-            class="btn btn-secondary dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Add Action
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" (click)="this.createAction('EnableSprite')">Enable sprite</a>
-            </li>
-            <li><a class="dropdown-item" href="#">Disable sprite</a></li>
-            <li><a class="dropdown-item" href="#">Enable textbox</a></li>
-            <li><a class="dropdown-item" href="#">Disable textbox</a></li>
-            <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
-            <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
-          </ul>
+        <div class="card text-center">
+          <div class="card-body">
+            <h5 class="card-title">Add action</h5>
+            <div class="dropdown">
+              <button
+                type="button"
+                class="btn btn-secondary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Add Action
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" (click)="this.createAction('EnableSprite')"
+                    >Enable sprite</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="#">Disable sprite</a></li>
+                <li><a class="dropdown-item" href="#">Enable textbox</a></li>
+                <li><a class="dropdown-item" href="#">Disable textbox</a></li>
+                <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
+                <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
