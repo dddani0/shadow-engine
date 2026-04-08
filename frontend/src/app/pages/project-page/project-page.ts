@@ -62,8 +62,8 @@ export class ProjectPage {
     //Set id from route's current version.
     const id = this.route.snapshot.paramMap.get('projectId') ?? '';
     this.projectId.set(id);
-    this.refresh();
     this.setStartSceneId();
+    this.refresh();
     this.newSceneTitle.set(`$New scene(${this.scenes.length})`);
   }
 
@@ -110,6 +110,12 @@ export class ProjectPage {
                 console.log(p);
               },
             });
+        } else {
+          // startSceneId already exists - set it and load timeline
+          this.startSceneId.set(project.startSceneId);
+          this.activeSceneId.set(project.startSceneId);
+          //Set the active scene
+          this.activeScene.set(project.scenes.find((s) => s.id === this.activeSceneId())!);
         }
       },
     });
@@ -138,6 +144,12 @@ export class ProjectPage {
     this.api.listScenes(projectId).subscribe({
       next: (sceneList) => {
         this.scenes.set(sceneList);
+        if (this.project()?.startSceneId) {
+          // Also update activeSceneId to match startSceneId if not already set
+          if (!this.activeSceneId()) {
+            this.activeSceneId.set(this.project()?.startSceneId!);
+          }
+        }
       },
       error: (e) => {
         this.error.set(this.formatError(e));
@@ -145,8 +157,10 @@ export class ProjectPage {
       },
       complete: () => {
         this.loading.set(false);
-        // Load timeline after scenes are loaded
-        this.loadActiveSceneTimeline();
+        // Load timeline after scenes are loaded and activeSceneId is set
+        if (this.activeSceneId()) {
+          this.loadActiveSceneTimeline();
+        }
       },
     });
   }
@@ -280,6 +294,7 @@ export class ProjectPage {
 
   private loadActiveSceneTimeline() {
     const activeSceneId = this.activeSceneId();
+    console.log(this.activeSceneId());
     if (!activeSceneId) return;
 
     this.api.getScene(activeSceneId).subscribe({
