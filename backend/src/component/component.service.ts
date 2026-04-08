@@ -7,7 +7,18 @@ import { UpdateComponentDto } from './dto/update-component.dto';
 export class ComponentService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateComponentDto) {
+  async create(dto: CreateComponentDto) {
+    // Validate that the scene exists
+    console.log(dto.sceneId);
+    const scene = await this.prisma.scene.findUnique({
+      where: { id: dto.sceneId },
+    });
+    console.log(dto.sceneId);
+
+    if (!scene) {
+      throw new Error(`Scene with id ${dto.sceneId} not found`);
+    }
+
     return this.prisma.component.create({
       data: {
         title: dto.title ?? 'Untitled Component',
@@ -15,7 +26,7 @@ export class ComponentService {
         sprite: dto.sprite
           ? {
               create: {
-                path: dto.sprite.path,
+                path: dto.sprite?.path,
               },
             }
           : undefined,

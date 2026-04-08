@@ -20,10 +20,17 @@ export declare class ScenesService {
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     findByProject(projectId: string): Prisma.PrismaPromise<({
-        timeline: {
+        timeline: ({
+            actions: {
+                id: string;
+                type: string;
+                timelineId: string;
+                componentId: string | null;
+            }[];
+        } & {
             id: string;
             sceneId: string;
-        } | null;
+        }) | null;
     } & {
         id: string;
         projectId: string;
@@ -34,10 +41,17 @@ export declare class ScenesService {
         updatedAt: Date;
     })[]>;
     findOne(id: string): Prisma.Prisma__SceneClient<{
-        timeline: {
+        timeline: ({
+            actions: {
+                id: string;
+                type: string;
+                timelineId: string;
+                componentId: string | null;
+            }[];
+        } & {
             id: string;
             sceneId: string;
-        } | null;
+        }) | null;
         choicesFrom: {
             id: string;
             orderIndex: number;

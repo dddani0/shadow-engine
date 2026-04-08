@@ -19,6 +19,7 @@ const playback_module_1 = require("./playback/playback.module");
 const component_module_1 = require("./component/component.module");
 const timeline_module_1 = require("./timeline/timeline.module");
 const action_module_1 = require("./action/action.module");
+const sprite_module_1 = require("./sprite/sprite.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -34,6 +35,7 @@ exports.AppModule = AppModule = __decorate([
             component_module_1.ComponentModule,
             timeline_module_1.TimelineModule,
             action_module_1.ActionModule,
+            sprite_module_1.SpriteModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

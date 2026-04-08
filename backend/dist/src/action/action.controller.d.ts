@@ -7,8 +7,8 @@ export declare class ActionController {
     create(dto: CreateActionDto): import("@prisma/client").Prisma.Prisma__ActionClient<{
         id: string;
         type: string;
-        spriteId: string | null;
         timelineId: string;
+        componentId: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         timeline: {
@@ -18,8 +18,8 @@ export declare class ActionController {
     } & {
         id: string;
         type: string;
-        spriteId: string | null;
         timelineId: string;
+        componentId: string | null;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ActionClient<{
         timeline: {
@@ -29,19 +29,19 @@ export declare class ActionController {
     } & {
         id: string;
         type: string;
-        spriteId: string | null;
         timelineId: string;
+        componentId: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, dto: UpdateActionDto): import("@prisma/client").Prisma.Prisma__ActionClient<{
         id: string;
         type: string;
-        spriteId: string | null;
         timelineId: string;
+        componentId: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__ActionClient<{
         id: string;
         type: string;
-        spriteId: string | null;
         timelineId: string;
+        componentId: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }

@@ -53,12 +53,14 @@ model Timeline {
   actions Action[]
 }
 
+//Le kell egyszerűsíteni: egybe kell vonni a sprite, textbox cuccokat a komponensel
+
 //Component
 model Component {
   id      String   @id @default(cuid())
   title   String
-  scene   Scene    @relation(fields: [sceneId], references: [id])
-  sceneId String   @unique
+  scene   Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId String
   //Sprite
   sprite  Sprite?
   //Textbox
@@ -67,10 +69,10 @@ model Component {
 }
 
 model Sprite {
-  id          String    @id @default(cuid())
+  id          String     @id @default(cuid())
   path        String
-  component   Component @relation(fields: [componentId], references: [id])
-  componentId String    @unique
+  component   Component? @relation(fields: [componentId], references: [id])
+  componentId String?    @unique
 }
 
 model Textbox {
@@ -84,11 +86,11 @@ model Textbox {
 
 //Action of the timeline
 model Action {
-  id         String   @id @default(cuid())
-  type       String
-  timeline   Timeline @relation(fields: [timelineId], references: [id])
-  timelineId String   @unique
-  spriteId   String?
+  id          String   @id @default(cuid())
+  type        String
+  timeline    Timeline @relation(fields: [timelineId], references: [id], onDelete: Cascade)
+  timelineId  String
+  componentId String?
 }
 
 //Variable of the project

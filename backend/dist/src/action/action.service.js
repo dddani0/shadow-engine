@@ -22,7 +22,7 @@ let ActionService = class ActionService {
             data: {
                 timelineId: dto.timelineId,
                 type: dto.type,
-                spriteId: dto.spriteId,
+                componentId: dto.componentId,
             },
         });
     }
@@ -45,12 +45,9 @@ let ActionService = class ActionService {
         return this.prisma.action.update({
             where: { id },
             data: {
-                ...(dto.actions?.[0]?.type !== undefined && {
-                    type: dto.actions[0].type,
-                }),
-                ...(dto.actions?.[0]?.spriteId !== undefined && {
-                    spriteId: dto.actions[0].spriteId,
-                }),
+                timelineId: dto.timelineId,
+                type: dto.type,
+                componentId: dto.componentId,
             },
         });
     }

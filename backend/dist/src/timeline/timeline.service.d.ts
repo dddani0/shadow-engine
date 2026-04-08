@@ -16,8 +16,8 @@ export declare class TimelineService {
         actions: {
             id: string;
             type: string;
-            spriteId: string | null;
             timelineId: string;
+            componentId: string | null;
         }[];
     } & {
         id: string;

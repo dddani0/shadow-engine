@@ -26,7 +26,7 @@ export class ApiClient {
     return this.http.post<Project>(`${this.baseUrl}/projects`, body);
   }
 
-  createAction(body: { type: string; timelineId: string; spriteId?: string }): Observable<Action> {
+  createAction(body: { type: string; timelineId: string; componentId?: string }): Observable<Action> {
     return this.http.post<Action>(`${this.baseUrl}/actions`, body);
   }
 
@@ -48,8 +48,8 @@ export class ApiClient {
     });
   }
 
-  getScene(id: string): Observable<Scene & { choicesFrom?: Choice[] }> {
-    return this.http.get<Scene & { choicesFrom?: Choice[] }>(`${this.baseUrl}/scenes/${id}`);
+  getScene(id: string): Observable<Scene> {
+    return this.http.get<Scene>(`${this.baseUrl}/scenes/${id}`);
   }
 
   createScene(body: {
@@ -128,8 +128,7 @@ export class ApiClient {
   createComponent(body: {
     sceneId: string;
     title: string;
-    spriteId?: string;
-    textBoxId?: string;
+    sprite: Sprite;
   }): Observable<Component> {
     return this.http.post<Component>(`${this.baseUrl}/components`, body);
   }
@@ -183,25 +182,25 @@ export class ApiClient {
 
   // Sprites
   listSprites(): Observable<Sprite[]> {
-    return this.http.get<Sprite[]>(`${this.baseUrl}/components`);
+    return this.http.get<Sprite[]>(`${this.baseUrl}/sprite`);
   }
 
   getSprite(id: string): Observable<Sprite> {
-    return this.http.get<Sprite>(`${this.baseUrl}/components/${id}`);
+    return this.http.get<Sprite>(`${this.baseUrl}/sprite/${id}`);
   }
 
   createSprite(body: { path: string }): Observable<Sprite> {
-    return this.http.post<Sprite>(`${this.baseUrl}/components`, body);
+    return this.http.post<Sprite>(`${this.baseUrl}/sprite`, body);
   }
 
   updateSprite(
     id: string,
     body: { path?: string },
   ): Observable<Sprite> {
-    return this.http.patch<Sprite>(`${this.baseUrl}/components/${id}`, body);
+    return this.http.patch<Sprite>(`${this.baseUrl}/sprite/${id}`, body);
   }
 
   deleteSprite(id: string): Observable<Sprite> {
-    return this.http.delete<Sprite>(`${this.baseUrl}/components/${id}`);
+    return this.http.delete<Sprite>(`${this.baseUrl}/sprite/${id}`);
   }
 }

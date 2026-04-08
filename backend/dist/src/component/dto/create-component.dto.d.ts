@@ -1,10 +1,8 @@
+import { Sprite } from '@prisma/client';
 export declare class CreateComponentDto {
-    id?: string;
     title: string;
     sceneId: string;
-    sprite?: {
-        path: string;
-    };
+    sprite?: Sprite;
     textbox?: {
         title?: string;
         content: string[];

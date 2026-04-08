@@ -10,6 +10,7 @@ import { PlaybackModule } from './playback/playback.module';
 import { ComponentModule } from './component/component.module';
 import { TimelineModule } from './timeline/timeline.module';
 import { ActionModule } from './action/action.module';
+import { SpriteModule } from './sprite/sprite.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ActionModule } from './action/action.module';
     ComponentModule,
     TimelineModule,
     ActionModule,
+    SpriteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

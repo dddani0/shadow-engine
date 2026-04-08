@@ -30,6 +30,8 @@ export class ProjectPage {
   readonly activeSceneId = signal<string>('');
   //Active scene.
   readonly activeScene = signal<Scene | null>(null);
+  //Active timeline
+  readonly activeSceneTimeline = signal<Timeline | undefined>(undefined);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -60,8 +62,8 @@ export class ProjectPage {
     //Set id from route's current version.
     const id = this.route.snapshot.paramMap.get('projectId') ?? '';
     this.projectId.set(id);
-    this.refresh();
     this.setStartSceneId();
+    this.refresh();
     this.newSceneTitle.set(`$New scene(${this.scenes.length})`);
   }
 
@@ -90,16 +92,14 @@ export class ProjectPage {
     this.api.getProject(projectId).subscribe({
       next: (project) => {
         if (!project.startSceneId) {
-          console.log('set initial scene');
           //Set the starting scene id attribute
           this.startSceneId.set(project.scenes[0].id);
-          console.log(this.startSceneId());
           //Set the active scene's id
           this.activeSceneId.set(project.scenes[0].id);
-          console.log(this.activeSceneId());
           //Set the active scene
           this.activeScene.set(project.scenes.find((s) => s.id === this.activeSceneId())!);
-          console.log(this.activeScene());
+          //Load the timeline for the active scene
+          this.loadActiveSceneTimeline();
           //Update the project's data in the database according to the change
           this.api
             .updateProject(projectId, {
@@ -110,6 +110,12 @@ export class ProjectPage {
                 console.log(p);
               },
             });
+        } else {
+          // startSceneId already exists - set it and load timeline
+          this.startSceneId.set(project.startSceneId);
+          this.activeSceneId.set(project.startSceneId);
+          //Set the active scene
+          this.activeScene.set(project.scenes.find((s) => s.id === this.activeSceneId())!);
         }
       },
     });
@@ -138,22 +144,25 @@ export class ProjectPage {
     this.api.listScenes(projectId).subscribe({
       next: (sceneList) => {
         this.scenes.set(sceneList);
-        // this.api.getTimeline(this.activeScene()?.timeline.id!).subscribe({
-        //   next: (timeline) => {
-        //     const scene = this.activeScene();
-        //     if (scene) {
-        //       scene.timeline = timeline;
-        //     }
-        //   },
-        // });
+        if (this.project()?.startSceneId) {
+          // Also update activeSceneId to match startSceneId if not already set
+          if (!this.activeSceneId()) {
+            this.activeSceneId.set(this.project()?.startSceneId!);
+          }
+        }
       },
       error: (e) => {
         this.error.set(this.formatError(e));
         this.loading.set(false);
       },
-      complete: () => this.loading.set(false),
+      complete: () => {
+        this.loading.set(false);
+        // Load timeline after scenes are loaded and activeSceneId is set
+        if (this.activeSceneId()) {
+          this.loadActiveSceneTimeline();
+        }
+      },
     });
-    //Update active scene timeline
   }
 
   createScene() {
@@ -177,60 +186,47 @@ export class ProjectPage {
       });
   }
 
-  createComponent() {
-    const activeSceneId = this.activeScene()?.id;
-    if (!activeSceneId) return;
-
-    this.api
-      .createComponent({
-        sceneId: activeSceneId,
-        title: this.newComponentTitle(),
-      })
-      .subscribe({
-        next: () => this.refresh(),
-        error: (e) => {
-          this.error.set(this.formatError(e));
-          this.loading.set(false);
-        },
-      });
-  }
-
-  updateTimeline() {
-    const activeSceneId = this.activeScene()?.id;
-    if (!activeSceneId || !this.activeScene()) return;
-    this.api.getTimeline(activeSceneId).subscribe({
-      next: (timeline) => {
-        const scene = this.activeScene();
-        if (scene) {
-          scene.timeline = timeline;
-        }
-      },
-    });
+  refreshActiveTimeline() {
+    this.loadActiveSceneTimeline();
   }
 
   createAction(type: string) {
     switch (type) {
       case 'EnableSprite':
         console.log('clicked');
-        //First, we create the sprite, then the component.
+        //Create sprite
         this.api.createSprite({ path: 'Path' }).subscribe({
           next: (sprite) => {
-            if (this.activeScene()?.timeline) {
+            if (this.activeSceneId() != null) {
+              //Create component frame for sprite
               this.api
-                .createAction({
-                  type: type,
-                  timelineId: this.activeScene()?.timeline.id!,
-                  spriteId: sprite.id,
+                .createComponent({
+                  sceneId: this.activeSceneId(),
+                  title: this.newComponentTitle(),
+                  sprite: sprite,
                 })
                 .subscribe({
-                  next: () => {
-                    this.refresh();
-                  },
-                  error: (e) => {
-                    this.error.set(this.formatError(e));
-                    this.loading.set(false);
+                  next: (component) => {
+                    //Create action for the sprite
+                    this.api
+                      .createAction({
+                        type: type,
+                        timelineId: this.activeScene()?.timeline.id!,
+                        componentId: component.id,
+                      })
+                      .subscribe({
+                        next: () => {
+                          this.refreshActiveTimeline();
+                        },
+                        error: (e) => {
+                          this.error.set(this.formatError(e));
+                          this.loading.set(false);
+                        },
+                      });
                   },
                 });
+            }
+            if (this.activeScene()?.timeline) {
             }
           },
           error: (e) => {
@@ -291,7 +287,30 @@ export class ProjectPage {
 
   changeScene(target: Event) {
     const targetId = (target.currentTarget as HTMLElement).id;
+    this.activeSceneId.set(targetId);
     this.activeScene.set(this.scenes().find((s) => s.id === targetId) ?? null);
+    this.loadActiveSceneTimeline();
+  }
+
+  private loadActiveSceneTimeline() {
+    const activeSceneId = this.activeSceneId();
+    console.log(this.activeSceneId());
+    if (!activeSceneId) return;
+
+    this.api.getScene(activeSceneId).subscribe({
+      next: (scene) => {
+        this.activeSceneTimeline.set(scene.timeline);
+        // Also update the activeScene object with fresh timeline data
+        const currentScene = this.activeScene();
+        if (currentScene) {
+          currentScene.timeline = scene.timeline;
+          this.activeScene.set(currentScene);
+        }
+      },
+      error: (e) => {
+        console.error('Failed to load scene timeline:', e);
+      },
+    });
   }
 
   private formatError(e: unknown) {

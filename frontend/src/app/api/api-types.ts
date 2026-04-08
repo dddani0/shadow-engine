@@ -65,5 +65,5 @@ export interface Action {
   id: string;
   type: string;
   timelineId: string;
-  spriteId?: string;
+  componentId?: string;
 }
