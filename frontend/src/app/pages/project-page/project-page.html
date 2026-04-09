@@ -3,22 +3,35 @@
     <!-- Header -->
     <div class="container">
       <h1>Editor: {{ this.project()?.title }}</h1>
+      <div>
+        <samp class="pb-3">
+          @if (this.project()?.description) {
+            {{ this.project()?.description }}
+          } @else {
+            No description set.
+          }
+        </samp>
+      </div>
       <div class="btn-group">
-        <button [routerLink]="['/play', projectId()]" type="button" class="btn btn-primary">
+        <button [routerLink]="['/play', projectId()]" type="button" class="btn btn-outline-success">
           Play
-        </button>
-        <button [disabled]="loading()" (click)="refresh()" type="button" class="btn btn-secondary">
-          Refresh
         </button>
         <button
           type="button"
-          class="btn btn-secondary"
+          class="btn btn-outline-secondary"
           data-bs-toggle="modal"
           data-bs-target="#editModal"
         >
           Edit
         </button>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <button
+          [disabled]="loading()"
+          (click)="refresh()"
+          type="button"
+          class="btn btn-outline-primary"
+        >
+          Refresh
+        </button>
       </div>
     </div>
     <!-- Modal for editing (scenes) -->
@@ -86,42 +99,89 @@
       </ul>
     </div>
     <div class="container-fluid pt-3">
-      <h1>Timeline</h1>
+      <h2>Timeline</h2>
       <div class="d-flex">
         @for (action of this.activeSceneTimeline()?.actions; track $index) {
-          <div class="card">
-            <div class="card-header">
-              {{ action.type }}
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">{{ $index + 1 }}. Action</h5>
+              <p class="card-text">Type: {{ action.type }}</p>
+              <div class="btn-group" role="group" aria-label="mixed style">
+                <button type="button" class="btn btn-primary">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+              </div>
             </div>
           </div>
         }
-        <div class="dropdown">
-          <button
-            type="button"
-            class="btn btn-secondary dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Add Action
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" (click)="this.createAction('EnableSprite')">Enable sprite</a>
-            </li>
-            <li><a class="dropdown-item" href="#">Disable sprite</a></li>
-            <li><a class="dropdown-item" href="#">Enable textbox</a></li>
-            <li><a class="dropdown-item" href="#">Disable textbox</a></li>
-            <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
-            <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
-          </ul>
+        <div class="card text-center">
+          <div class="card-body">
+            <h5 class="card-title">Add action</h5>
+            <div class="dropdown">
+              <button
+                type="button"
+                class="btn btn-secondary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Add Action
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" (click)="this.createAction('EnableSprite')"
+                    >Enable sprite</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="#">Disable sprite</a></li>
+                <li><a class="dropdown-item" href="#">Enable textbox</a></li>
+                <li><a class="dropdown-item" href="#">Disable textbox</a></li>
+                <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
+                <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="container pt-3">
-      <button class="btn btn-secondary">Variable</button>
-      <button class="btn btn-secondary">Rename</button>
-      <button class="btn btn-danger">Delete</button>
+      <div
+        class="modal fade"
+        id="variableModal"
+        tabindex="-1"
+        aria-labelledby="Manage variables"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="manageVariables">Variables</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <button class="btn btn-outline-success">New variable</button>
+                </div>
+              </form>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        data-bs-toggle="modal"
+        data-bs-target="#variableModal"
+        class="btn btn-outline-warning"
+      >
+        Variable management
+      </button>
     </div>
   </div>
-  <div class="container text-center"></div>
 </div>
