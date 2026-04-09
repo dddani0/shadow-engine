@@ -27,6 +27,8 @@ export class HomePage {
 
   readonly canCreate = computed(() => this.newTitle().trim().length > 0 && !this.loading());
 
+  allowedProjectLimit : number = 2;
+
   constructor() {
     this.refresh();
   }
