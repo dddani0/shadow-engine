@@ -18,4 +18,11 @@ export const routes: Routes = [
     path: 'play/:projectId',
     loadComponent: () => import('./pages/play-page/play-page').then((m) => m.PlayPage),
   },
+  {
+    path: 'projects',
+    loadComponent: () =>
+      import('./pages/project-collection-page/project-collection-page').then(
+        (m) => m.ProjectCollectionPage,
+      ),
+  },
 ];
