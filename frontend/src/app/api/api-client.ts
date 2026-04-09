@@ -1,7 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Action, Choice, Component, PlaybackResponse, Project, Scene, Sprite, Timeline } from './api-types';
+import {
+  Action,
+  Choice,
+  Component,
+  PlaybackResponse,
+  Project,
+  Scene,
+  Sprite,
+  Textbox,
+  Timeline,
+} from './api-types';
 
 @Injectable({ providedIn: 'root' })
 export class ApiClient {
@@ -26,13 +36,17 @@ export class ApiClient {
     return this.http.post<Project>(`${this.baseUrl}/projects`, body);
   }
 
-  createAction(body: { type: string; timelineId: string; componentId?: string }): Observable<Action> {
+  createAction(body: {
+    type: string;
+    timelineId: string;
+    componentId?: string;
+  }): Observable<Action> {
     return this.http.post<Action>(`${this.baseUrl}/actions`, body);
   }
 
   updateProject(
     id: string,
-    body: { title?: string; description?: string | null, startSceneId?: string },
+    body: { title?: string; description?: string | null; startSceneId?: string },
   ): Observable<Project> {
     return this.http.patch<Project>(`${this.baseUrl}/projects/${id}`, body);
   }
@@ -128,7 +142,8 @@ export class ApiClient {
   createComponent(body: {
     sceneId: string;
     title: string;
-    sprite: Sprite;
+    sprite?: Sprite;
+    textbox?: Textbox;
   }): Observable<Component> {
     return this.http.post<Component>(`${this.baseUrl}/components`, body);
   }
@@ -153,10 +168,7 @@ export class ApiClient {
     return this.http.post<Timeline>(`${this.baseUrl}/timelines`, body);
   }
 
-  updateTimeline(
-    id: string,
-    body: { actions?: Action[] },
-  ): Observable<Timeline> {
+  updateTimeline(id: string, body: { actions?: Action[] }): Observable<Timeline> {
     return this.http.patch<Timeline>(`${this.baseUrl}/timelines/${id}`, body);
   }
 
@@ -169,10 +181,7 @@ export class ApiClient {
     return this.http.get<Action>(`${this.baseUrl}/actions/${id}`);
   }
 
-  updateAction(
-    id: string,
-    body: { type?: string; spriteId?: string },
-  ): Observable<Action> {
+  updateAction(id: string, body: { type?: string; spriteId?: string }): Observable<Action> {
     return this.http.patch<Action>(`${this.baseUrl}/actions/${id}`, body);
   }
 
@@ -193,14 +202,50 @@ export class ApiClient {
     return this.http.post<Sprite>(`${this.baseUrl}/sprite`, body);
   }
 
-  updateSprite(
-    id: string,
-    body: { path?: string },
-  ): Observable<Sprite> {
+  updateSprite(id: string, body: { path?: string }): Observable<Sprite> {
     return this.http.patch<Sprite>(`${this.baseUrl}/sprite/${id}`, body);
   }
 
   deleteSprite(id: string): Observable<Sprite> {
     return this.http.delete<Sprite>(`${this.baseUrl}/sprite/${id}`);
+  }
+
+  // Textboxes
+  listTextboxes(): Observable<Textbox[]> {
+    return this.http.get<Textbox[]>(`${this.baseUrl}/textbox`);
+  }
+
+  getTextbox(id: string): Observable<Textbox> {
+    return this.http.get<Textbox>(`${this.baseUrl}/textbox/${id}`);
+  }
+
+  createTextbox(body: {
+    title?: string;
+    content: string[];
+    charPerSecond: number;
+  }): Observable<Textbox> {
+    return this.http.post<Textbox>(`${this.baseUrl}/textbox`, body);
+  }
+
+  updateTextbox(
+    id: string,
+    body: {
+      title?: string;
+      content?: string[];
+      charPerSecond?: number;
+      componentId?: string;
+    },
+  ): Observable<Textbox> {
+    return this.http.patch<Textbox>(`${this.baseUrl}/textbox/${id}`, body);
+  }
+
+  deleteTextbox(id: string): Observable<Textbox> {
+    return this.http.delete<Textbox>(`${this.baseUrl}/textbox/${id}`);
+  }
+
+  getTextboxByComponent(componentId: string): Observable<Textbox | null> {
+    return this.http.get<Textbox | null>(`${this.baseUrl}/textbox/by-component`, {
+      params: { componentId },
+    });
   }
 }

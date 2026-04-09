@@ -193,7 +193,6 @@ export class ProjectPage {
   createAction(type: string) {
     switch (type) {
       case 'EnableSprite':
-        console.log('clicked');
         //Create sprite
         this.api.createSprite({ path: 'Path' }).subscribe({
           next: (sprite) => {
@@ -235,6 +234,75 @@ export class ProjectPage {
           },
         });
         break;
+      case 'DisableSprite':
+        this.api.createSprite({ path: 'Path' }).subscribe({
+          next: (sprite) => {
+            if (this.activeSceneId() != null) {
+              //Create component frame for sprite
+              this.api
+                .createComponent({
+                  sceneId: this.activeSceneId(),
+                  title: this.newComponentTitle(),
+                  sprite: sprite,
+                })
+                .subscribe({
+                  next: (component) => {
+                    //Create action for the sprite
+                    this.api
+                      .createAction({
+                        type: type,
+                        timelineId: this.activeScene()?.timeline.id!,
+                        componentId: component.id,
+                      })
+                      .subscribe({
+                        next: () => {
+                          this.refreshActiveTimeline();
+                        },
+                        error: (e) => {
+                          this.error.set(this.formatError(e));
+                          this.loading.set(false);
+                        },
+                      });
+                  },
+                });
+            }
+            if (this.activeScene()?.timeline) {
+            }
+          },
+          error: (e) => {
+            this.error.set(this.formatError(e));
+            this.loading.set(false);
+          },
+        });
+        break;
+      case 'EnableTextbox':
+        this.api
+          .createTextbox({
+            content: [],
+            charPerSecond: 0,
+          })
+          .subscribe({
+            next: (textbox) => {
+              this.api
+                .createComponent({
+                  sceneId: this.activeSceneId(),
+                  title: this.newComponentTitle(),
+                  textbox: textbox,
+                })
+                .subscribe({
+                  next: (component) => {
+                    this.api.createAction({
+                      type: type,
+                      timelineId: this.activeScene()?.timeline.id!,
+                      componentId: component.id,
+                    });
+                  },
+                });
+            },
+          });
+        break;
+      default:
+        console.log('No such event.');
     }
   }
 

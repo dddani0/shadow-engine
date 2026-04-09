@@ -131,11 +131,31 @@
                     >Enable sprite</a
                   >
                 </li>
-                <li><a class="dropdown-item" href="#">Disable sprite</a></li>
-                <li><a class="dropdown-item" href="#">Enable textbox</a></li>
-                <li><a class="dropdown-item" href="#">Disable textbox</a></li>
-                <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
-                <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
+                <li>
+                  <a class="dropdown-item" (click)="this.createAction('DisableSprite')"
+                    >Disable sprite</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="this.createAction('EnableTextbox')"
+                    >Enable textbox</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="this.createAction('DisableTextbox')"
+                    >Disable textbox</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="this.createAction('EnableChoiceMenu')"
+                    >Enable choice menu</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" (click)="this.createAction('DisableChoiceMenu')"
+                    >Disable choice menu</a
+                  >
+                </li>
               </ul>
             </div>
           </div>

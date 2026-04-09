@@ -51,6 +51,9 @@ export interface Sprite {
 
 export interface Textbox {
   id: string;
+  title?: string;
+  content: string[];
+  characterPerSecond: number;
 }
 
 export interface Component {
