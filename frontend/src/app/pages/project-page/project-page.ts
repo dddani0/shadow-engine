@@ -101,15 +101,9 @@ export class ProjectPage {
           //Load the timeline for the active scene
           this.loadActiveSceneTimeline();
           //Update the project's data in the database according to the change
-          this.api
-            .updateProject(projectId, {
-              startSceneId: this.startSceneId()!,
-            })
-            .subscribe({
-              next: (p) => {
-                console.log(p);
-              },
-            });
+          this.api.updateProject(projectId, {
+            startSceneId: this.startSceneId()!,
+          });
         } else {
           // startSceneId already exists - set it and load timeline
           this.startSceneId.set(project.startSceneId);
@@ -333,7 +327,6 @@ export class ProjectPage {
 
   private loadActiveSceneTimeline() {
     const activeSceneId = this.activeSceneId();
-    console.log(this.activeSceneId());
     if (!activeSceneId) return;
 
     this.api.getScene(activeSceneId).subscribe({
