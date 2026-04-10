@@ -5,15 +5,9 @@ export declare class TextboxService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(dto: CreateTextboxDto): Promise<{
-        component: {
-            id: string;
-            title: string;
-            sceneId: string;
-        };
-    } & {
         id: string;
         title: string | null;
-        componentId: string;
+        componentId: string | null;
         content: string[];
         charPerSecond: number;
     }>;
@@ -22,11 +16,11 @@ export declare class TextboxService {
             id: string;
             title: string;
             sceneId: string;
-        };
+        } | null;
     } & {
         id: string;
         title: string | null;
-        componentId: string;
+        componentId: string | null;
         content: string[];
         charPerSecond: number;
     })[]>;
@@ -35,11 +29,11 @@ export declare class TextboxService {
             id: string;
             title: string;
             sceneId: string;
-        };
+        } | null;
     } & {
         id: string;
         title: string | null;
-        componentId: string;
+        componentId: string | null;
         content: string[];
         charPerSecond: number;
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
@@ -48,18 +42,18 @@ export declare class TextboxService {
             id: string;
             title: string;
             sceneId: string;
-        };
+        } | null;
     } & {
         id: string;
         title: string | null;
-        componentId: string;
+        componentId: string | null;
         content: string[];
         charPerSecond: number;
     }>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__TextboxClient<{
         id: string;
         title: string | null;
-        componentId: string;
+        componentId: string | null;
         content: string[];
         charPerSecond: number;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
@@ -68,11 +62,11 @@ export declare class TextboxService {
             id: string;
             title: string;
             sceneId: string;
-        };
+        } | null;
     } & {
         id: string;
         title: string | null;
-        componentId: string;
+        componentId: string | null;
         content: string[];
         charPerSecond: number;
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;

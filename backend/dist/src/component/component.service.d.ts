@@ -27,7 +27,7 @@ export declare class ComponentService {
         textBox: {
             id: string;
             title: string | null;
-            componentId: string;
+            componentId: string | null;
             content: string[];
             charPerSecond: number;
         } | null;
@@ -54,7 +54,7 @@ export declare class ComponentService {
         textBox: {
             id: string;
             title: string | null;
-            componentId: string;
+            componentId: string | null;
             content: string[];
             charPerSecond: number;
         } | null;
@@ -81,7 +81,7 @@ export declare class ComponentService {
         textBox: {
             id: string;
             title: string | null;
-            componentId: string;
+            componentId: string | null;
             content: string[];
             charPerSecond: number;
         } | null;
@@ -113,7 +113,7 @@ export declare class ComponentService {
         textBox: {
             id: string;
             title: string | null;
-            componentId: string;
+            componentId: string | null;
             content: string[];
             charPerSecond: number;
         } | null;

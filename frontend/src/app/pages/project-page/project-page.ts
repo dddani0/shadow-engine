@@ -193,6 +193,7 @@ export class ProjectPage {
   createAction(type: string) {
     switch (type) {
       case 'EnableSprite':
+      case 'DisableSprite':
         //Create sprite
         this.api.createSprite({ path: 'Path' }).subscribe({
           next: (sprite) => {
@@ -234,48 +235,8 @@ export class ProjectPage {
           },
         });
         break;
-      case 'DisableSprite':
-        this.api.createSprite({ path: 'Path' }).subscribe({
-          next: (sprite) => {
-            if (this.activeSceneId() != null) {
-              //Create component frame for sprite
-              this.api
-                .createComponent({
-                  sceneId: this.activeSceneId(),
-                  title: this.newComponentTitle(),
-                  sprite: sprite,
-                })
-                .subscribe({
-                  next: (component) => {
-                    //Create action for the sprite
-                    this.api
-                      .createAction({
-                        type: type,
-                        timelineId: this.activeScene()?.timeline.id!,
-                        componentId: component.id,
-                      })
-                      .subscribe({
-                        next: () => {
-                          this.refreshActiveTimeline();
-                        },
-                        error: (e) => {
-                          this.error.set(this.formatError(e));
-                          this.loading.set(false);
-                        },
-                      });
-                  },
-                });
-            }
-            if (this.activeScene()?.timeline) {
-            }
-          },
-          error: (e) => {
-            this.error.set(this.formatError(e));
-            this.loading.set(false);
-          },
-        });
-        break;
       case 'EnableTextbox':
+      case 'DisableTextbox':
         this.api
           .createTextbox({
             content: [],
@@ -291,11 +252,21 @@ export class ProjectPage {
                 })
                 .subscribe({
                   next: (component) => {
-                    this.api.createAction({
-                      type: type,
-                      timelineId: this.activeScene()?.timeline.id!,
-                      componentId: component.id,
-                    });
+                    this.api
+                      .createAction({
+                        type: type,
+                        timelineId: this.activeScene()?.timeline.id!,
+                        componentId: component.id,
+                      })
+                      .subscribe({
+                        next: () => {
+                          this.refreshActiveTimeline();
+                        },
+                        error: (e) => {
+                          this.error.set(this.formatError(e));
+                          this.loading.set(false);
+                        },
+                      });
                   },
                 });
             },

@@ -53,8 +53,6 @@ model Timeline {
   actions Action[]
 }
 
-//Le kell egyszerűsíteni: egybe kell vonni a sprite, textbox cuccokat a komponensel
-
 //Component
 model Component {
   id      String   @id @default(cuid())
@@ -76,12 +74,12 @@ model Sprite {
 }
 
 model Textbox {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   title         String?
   content       String[]
   charPerSecond Int
-  component     Component @relation(fields: [componentId], references: [id])
-  componentId   String    @unique
+  component     Component? @relation(fields: [componentId], references: [id])
+  componentId   String?    @unique
 }
 
 //Action of the timeline

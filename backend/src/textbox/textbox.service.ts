@@ -8,26 +8,11 @@ export class TextboxService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateTextboxDto) {
-    // Validate that the component exists
-    const component = await this.prisma.component.findUnique({
-      where: { id: dto.componentId },
-    });
-
-    if (!component) {
-      throw new Error(`Component with id ${dto.componentId} not found`);
-    }
-
     return this.prisma.textbox.create({
       data: {
         title: dto.title,
         content: dto.content,
         charPerSecond: dto.charPerSecond,
-        component: {
-          connect: { id: dto.componentId },
-        },
-      },
-      include: {
-        component: true,
       },
     });
   }
@@ -66,7 +51,9 @@ export class TextboxService {
       data: {
         ...(dto.title !== undefined && { title: dto.title }),
         ...(dto.content !== undefined && { content: dto.content }),
-        ...(dto.charPerSecond !== undefined && { charPerSecond: dto.charPerSecond }),
+        ...(dto.charPerSecond !== undefined && {
+          charPerSecond: dto.charPerSecond,
+        }),
         ...(dto.componentId !== undefined && {
           component: { connect: { id: dto.componentId } },
         }),
