@@ -22,14 +22,15 @@ let ChoiceMenuService = class ChoiceMenuService {
             data: {
                 title: dto.title ?? '',
                 description: dto.description ?? '',
-                componentId: dto.componentId ?? '',
             },
         });
     }
     findByComponent(componentId) {
         return this.prisma.choiceMenu.findMany({
             where: { componentId: componentId },
-            include: {},
+            include: {
+                choices: true,
+            },
         });
     }
     findOne(id) {

@@ -12,7 +12,6 @@ export class ChoiceMenuService {
       data: {
         title: dto.title ?? '',
         description: dto.description ?? '',
-        componentId: dto.componentId ?? '',
       },
     });
   }
@@ -20,7 +19,9 @@ export class ChoiceMenuService {
   findByComponent(componentId: string) {
     return this.prisma.choiceMenu.findMany({
       where: { componentId: componentId },
-      include: {},
+      include: {
+        choices: true,
+      },
     });
   }
 

@@ -10,7 +10,15 @@ export declare class ChoiceMenuService {
         description: string | null;
         componentId: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
-    findByComponent(componentId: string): import("@prisma/client").Prisma.PrismaPromise<({} & {
+    findByComponent(componentId: string): import("@prisma/client").Prisma.PrismaPromise<({
+        choices: {
+            id: string;
+            actionId: string;
+            choiceMenuId: string | null;
+            label: string;
+            orderIndex: number;
+        }[];
+    } & {
         id: string;
         title: string | null;
         description: string | null;
@@ -19,10 +27,10 @@ export declare class ChoiceMenuService {
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ChoiceMenuClient<{
         choices: {
             id: string;
-            orderIndex: number;
-            label: string;
             actionId: string;
             choiceMenuId: string | null;
+            label: string;
+            orderIndex: number;
         }[];
     } & {
         id: string;

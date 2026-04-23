@@ -268,6 +268,36 @@ export class ProjectPage {
           });
         break;
       case 'EnableChoiceMenu':
+      case 'DisableChoiceMenu':
+        this.api.createChoiceMenu({}).subscribe({
+          next: (choiceMenu) => {
+            this.api
+              .createComponent({
+                sceneId: this.activeSceneId(),
+                title: this.newComponentTitle(),
+                choiceMenu: choiceMenu,
+              })
+              .subscribe({
+                next: (component) => {
+                  this.api
+                    .createAction({
+                      type: type,
+                      timelineId: this.activeScene()?.timeline.id!,
+                      componentId: component.id,
+                    })
+                    .subscribe({
+                      next: () => {
+                        this.refreshActiveTimeline();
+                      },
+                      error: (e) => {
+                        this.error.set(this.formatError(e));
+                        this.loading.set(false);
+                      },
+                    });
+                },
+              });
+          },
+        });
         break;
       default:
         throw errorContext(() => console.log('No such event:' + type));
@@ -326,6 +356,14 @@ export class ProjectPage {
     this.activeSceneId.set(targetId);
     this.activeScene.set(this.scenes().find((s) => s.id === targetId) ?? null);
     this.loadActiveSceneTimeline();
+  }
+
+  deleteAction(actionId: string) {
+    this.api.deleteAction(actionId).subscribe({
+      next: () => {
+        this.refreshActiveTimeline();
+      },
+    });
   }
 
   private loadActiveSceneTimeline() {

@@ -22,10 +22,21 @@ export interface Scene {
 
 export interface Choice {
   id: string;
-  fromSceneId: string;
-  toSceneId: string;
+  actionId: string;
+  action: Action;
+  choiceMenu?: ChoiceMenu;
+  choiceMenuId?: string;
   label: string;
   orderIndex: number;
+}
+
+export interface ChoiceMenu {
+  id: string;
+  title?: string;
+  description?: string;
+  component?: Component;
+  componentId?: string;
+  choices: Choice[];
 }
 
 export interface PlaybackResponse {

@@ -11,6 +11,7 @@ import {
   Sprite,
   Textbox,
   Timeline,
+  ChoiceMenu
 } from './api-types';
 
 @Injectable({ providedIn: 'root' })
@@ -119,6 +120,15 @@ export class ApiClient {
     return this.http.delete<Choice>(`${this.baseUrl}/choices/${id}`);
   }
 
+  createChoiceMenu(body: {
+    title?: string;
+    description?: string;
+    componentId?: string;
+    choices?: Choice[];
+  }) {
+    return this.http.post<ChoiceMenu>(`${this.baseUrl}/choiceMenu`, body);
+  }
+
   // Playback
   getPlayback(projectId: string, sceneId?: string): Observable<PlaybackResponse> {
     const params: Record<string, string> = {};
@@ -144,6 +154,7 @@ export class ApiClient {
     title: string;
     sprite?: Sprite;
     textbox?: Textbox;
+    choiceMenu?: ChoiceMenu;
   }): Observable<Component> {
     return this.http.post<Component>(`${this.baseUrl}/components`, body);
   }
