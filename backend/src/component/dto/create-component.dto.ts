@@ -1,4 +1,4 @@
-import { Sprite } from '@prisma/client';
+import { ChoiceMenu, Sprite, Textbox } from '@prisma/client';
 
 export class CreateComponentDto {
   title: string;
@@ -6,13 +6,7 @@ export class CreateComponentDto {
   //Sprite
   sprite?: Sprite;
   //Textbox
-  textbox?: {
-    title?: string;
-    content: string[];
-    charPerSecond: number;
-  };
+  textbox?: Textbox;
   //Choice menu
-  choiceMenu?: {
-    title?: string;
-  };
+  choiceMenu?: ChoiceMenu;
 }

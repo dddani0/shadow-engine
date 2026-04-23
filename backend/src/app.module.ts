@@ -12,6 +12,7 @@ import { TimelineModule } from './timeline/timeline.module';
 import { ActionModule } from './action/action.module';
 import { SpriteModule } from './sprite/sprite.module';
 import { TextboxModule } from './textbox/textbox.module';
+import { ChoiceMenuModule } from './choiceMenu/choiceMenu.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TextboxModule } from './textbox/textbox.module';
     ProjectsModule,
     ScenesModule,
     ChoicesModule,
+    ChoiceMenuModule,
     PlaybackModule,
     ComponentModule,
     TimelineModule,

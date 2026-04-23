@@ -20,29 +20,27 @@ model Project {
 
 //Project scene
 model Scene {
-  id          String      @id @default(cuid())
-  projectId   String
-  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  title       String?
-  orderIndex  Int         @default(0)
-  metadata    Json? // background, characters on screen, audio cues
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  choicesFrom Choice[]    @relation("FromScene")
-  choicesTo   Choice[]    @relation("ToScene")
-  saveSlots   SaveSlot[]
-  timeline    Timeline? //THis is dumb, but one to one relations in prisma require optionality :O
-  components  Component[]
+  id         String      @id @default(cuid())
+  projectId  String
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title      String?
+  orderIndex Int         @default(0)
+  metadata   Json? // background, characters on screen, audio cues
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  saveSlots  SaveSlot[]
+  timeline   Timeline? //THis is dumb, but one to one relations in prisma require optionality :O
+  components Component[]
 }
 
 model Choice {
-  id          String @id @default(cuid())
-  fromSceneId String @unique
-  fromScene   Scene  @relation("FromScene", fields: [fromSceneId], references: [id], onDelete: Cascade)
-  toSceneId   String @unique
-  toScene     Scene  @relation("ToScene", fields: [toSceneId], references: [id], onDelete: Cascade)
-  label       String // option text shown to player
-  orderIndex  Int    @default(0)
+  id           String     @id @default(cuid())
+  actionId     String
+  action       Action     @relation(fields: [actionId], references: [id], onDelete: Cascade)
+  choiceMenu   ChoiceMenu? @relation(fields: [choiceMenuId], references: [id])
+  choiceMenuId String?     @unique
+  label        String
+  orderIndex   Int        @default(0)
 }
 
 //Project timeline
@@ -55,15 +53,25 @@ model Timeline {
 
 //Component
 model Component {
-  id      String   @id @default(cuid())
-  title   String
-  scene   Scene    @relation(fields: [sceneId], references: [id], onDelete: Cascade)
-  sceneId String
+  id         String      @id @default(cuid())
+  title      String
+  scene      Scene       @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId    String
   //Sprite
-  sprite  Sprite?
+  sprite     Sprite?
   //Textbox
-  textBox Textbox?
+  textBox    Textbox?
   //Choice menu
+  choiceMenu ChoiceMenu?
+}
+
+model ChoiceMenu {
+  id          String     @id @default(cuid())
+  title       String?
+  description String?
+  component   Component? @relation(fields: [componentId], references: [id])
+  componentId String?    @unique
+  choices     Choice[]
 }
 
 model Sprite {
@@ -89,6 +97,7 @@ model Action {
   timeline    Timeline @relation(fields: [timelineId], references: [id], onDelete: Cascade)
   timelineId  String
   componentId String?
+  choices     Choice[]
 }
 
 //Variable of the project

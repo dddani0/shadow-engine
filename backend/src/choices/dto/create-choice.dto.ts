@@ -1,6 +1,5 @@
 export class CreateChoiceDto {
-  fromSceneId: string;
-  toSceneId: string;
+  actionId: string;
   label: string;
   orderIndex?: number;
 }

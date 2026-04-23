@@ -22,8 +22,8 @@ export class ChoicesController {
   }
 
   @Get()
-  findByScene(@Query('sceneId') sceneId: string) {
-    return this.choicesService.findByScene(sceneId);
+  findByScene(@Query('actionId') actionId: string) {
+    return this.choicesService.findByAction(actionId);
   }
 
   @Get(':id')

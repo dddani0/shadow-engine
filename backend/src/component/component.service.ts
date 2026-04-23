@@ -9,7 +9,6 @@ export class ComponentService {
 
   async create(dto: CreateComponentDto) {
     // Validate that the scene exists
-    console.log(dto.sceneId);
     const scene = await this.prisma.scene.findUnique({
       where: { id: dto.sceneId },
     });
@@ -27,6 +26,14 @@ export class ComponentService {
           ? {
               create: {
                 path: dto.sprite?.path,
+              },
+            }
+          : undefined,
+        textBox: dto.textbox
+          ? {
+              create: {
+                content: [],
+                charPerSecond: 5,
               },
             }
           : undefined,

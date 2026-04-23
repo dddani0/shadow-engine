@@ -2,6 +2,7 @@ import { Action, Scene, Sprite, Choice, Project, Timeline } from './../../api/ap
 import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
+import { errorContext } from 'rxjs/internal/util/errorContext';
 
 /*
 
@@ -234,7 +235,7 @@ export class ProjectPage {
         this.api
           .createTextbox({
             content: [],
-            charPerSecond: 0,
+            charPerSecond: 5,
           })
           .subscribe({
             next: (textbox) => {
@@ -266,8 +267,10 @@ export class ProjectPage {
             },
           });
         break;
+      case 'EnableChoiceMenu':
+        break;
       default:
-        console.log('No such event.');
+        throw errorContext(() => console.log('No such event:' + type));
     }
   }
 

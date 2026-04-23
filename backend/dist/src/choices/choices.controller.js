@@ -25,8 +25,8 @@ let ChoicesController = class ChoicesController {
     create(dto) {
         return this.choicesService.create(dto);
     }
-    findByScene(sceneId) {
-        return this.choicesService.findByScene(sceneId);
+    findByScene(actionId) {
+        return this.choicesService.findByAction(actionId);
     }
     findOne(id) {
         return this.choicesService.findOne(id);
@@ -48,7 +48,7 @@ __decorate([
 ], ChoicesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('sceneId')),
+    __param(0, (0, common_1.Query)('actionId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
