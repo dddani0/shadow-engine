@@ -29,6 +29,10 @@ export class ProjectPage {
   //Current project
   readonly projectId = signal<string>('');
   readonly project = signal<Project | null>(null);
+
+  readonly activeProjectTitle = signal<string>('');
+  readonly activeProjectDescription = signal<string>('');
+
   //Current scene
   readonly scenes = signal<Scene[]>([]);
   //The starting scene in the project (always the first scene in case of new project)
@@ -382,6 +386,26 @@ export class ProjectPage {
     this.activeSceneId.set(targetId);
     this.activeScene.set(this.scenes().find((s) => s.id === targetId) ?? null);
     this.loadActiveSceneTimeline();
+  }
+
+  editProjectAttributes() {
+    this.activeProjectTitle.set(this.project()?.title!);
+    this.activeProjectDescription.set(this.project()?.description!);
+  }
+
+  saveProjectAttributes() {
+    this.api
+      .updateProject(this.projectId(), {
+        title: this.activeProjectTitle(),
+        description:
+          this.activeProjectDescription() === '' ? null : this.activeProjectDescription(),
+      })
+      .subscribe({
+        next: (p) => {
+          console.log(p);
+          this.refresh();
+        },
+      });
   }
 
   editAction(action: Action) {

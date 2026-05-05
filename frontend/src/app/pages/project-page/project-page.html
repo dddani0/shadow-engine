@@ -29,6 +29,7 @@
           class="btn btn-outline-secondary"
           data-bs-toggle="modal"
           data-bs-target="#editModal"
+          (click)="this.editProjectAttributes()"
         >
           Edit
         </button>
@@ -54,7 +55,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="editModalLabel">Edit {{ this.project()?.title }}</h1>
+            <h1 class="modal-title fs-5" id="editModalLabel">
+              Edit "{{ this.project()?.title }}" project
+            </h1>
             <button
               type="button"
               class="btn-close"
@@ -70,7 +73,8 @@
                   type="text"
                   class="form-control"
                   id="projectTitle"
-                  [value]="this.project()?.title"
+                  (input)="this.activeProjectTitle.set(onTextInput($event))"
+                  [value]="this.activeProjectTitle()"
                 />
               </div>
               <div class="mb-3">
@@ -78,13 +82,21 @@
                 <textarea
                   class="form-control"
                   id="projectDescription"
-                  [value]="this.project()?.description"
+                  (input)="this.activeProjectDescription.set(onTextInput($event))"
+                  [value]="this.activeProjectDescription()"
                 ></textarea>
               </div>
             </form>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                (click)="this.saveProjectAttributes()"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>
