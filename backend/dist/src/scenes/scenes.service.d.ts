@@ -12,12 +12,12 @@ export declare class ScenesService {
         } | null;
     } & {
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     findByProject(projectId: string): Prisma.PrismaPromise<({
         timeline: ({
@@ -33,12 +33,12 @@ export declare class ScenesService {
         }) | null;
     } & {
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     })[]>;
     findOne(id: string): Prisma.Prisma__SceneClient<{
         timeline: ({
@@ -54,29 +54,29 @@ export declare class ScenesService {
         }) | null;
     } & {
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     update(id: string, dto: UpdateSceneDto): Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
     remove(id: string): Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, Prisma.PrismaClientOptions>;
 }

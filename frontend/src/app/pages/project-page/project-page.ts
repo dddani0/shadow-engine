@@ -1,5 +1,5 @@
-import { Action, Scene, Sprite, Choice, Project, Timeline } from './../../api/api-types';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Action, Scene, Component, Sprite, Choice, Project, Timeline } from './../../api/api-types';
+import { Component as AngularComponent, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
 import { errorContext } from 'rxjs/internal/util/errorContext';
@@ -8,7 +8,7 @@ import { errorContext } from 'rxjs/internal/util/errorContext';
 
  */
 
-@Component({
+@AngularComponent({
   selector: 'app-project-page',
   imports: [RouterLink],
   templateUrl: './project-page.html',
@@ -33,6 +33,10 @@ export class ProjectPage {
   readonly activeScene = signal<Scene | null>(null);
   //Active timeline
   readonly activeSceneTimeline = signal<Timeline | undefined>(undefined);
+
+  //Active action
+  readonly activeAction = signal<Action | null>(null);
+  readonly activeComponent = signal<Component | null>(null);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -304,6 +308,14 @@ export class ProjectPage {
     }
   }
 
+  getAction(componentId: string) {
+    this.api.getComponent(componentId).subscribe({
+      next: (comp) => {
+        return comp;
+      },
+    });
+  }
+
   deleteScene(sceneId: string) {
     if (!confirm('Delete this scene?')) return;
     this.loading.set(true);
@@ -356,6 +368,24 @@ export class ProjectPage {
     this.activeSceneId.set(targetId);
     this.activeScene.set(this.scenes().find((s) => s.id === targetId) ?? null);
     this.loadActiveSceneTimeline();
+  }
+
+  editAction(action: Action) {
+    this.activeAction.set(action);
+    this.api.getComponent(action?.componentId!).subscribe({
+      next: (component) => {
+        this.activeComponent.set(component);
+      },
+    });
+  }
+
+  closeEditAction() {
+    this.activeAction.set(null);
+    this.activeComponent.set(null);
+  }
+
+  saveEditAction() {
+
   }
 
   deleteAction(actionId: string) {

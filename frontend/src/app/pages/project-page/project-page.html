@@ -91,6 +91,67 @@
       </div>
     </div>
     <!-- Navbar (scenes) -->
+    <div
+      class="modal fade"
+      id="actionEditModal"
+      tabindex="-1"
+      aria-labelledby="Edit action"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Edit "{{ this.activeAction()?.type }}" action</h2>
+          </div>
+          <div class="modal-body">
+            <form>
+              @switch (this.activeAction()?.type) {
+                @case ('EnableSprite')
+                @case ('DisableSprite') {
+                  <label for="spritePath">Sprite path</label>
+                  <br>
+                  <input id="spritePath" type="text" [value]="this.activeComponent()?.sprite?.path" />
+                }
+                @case ('EnableTextbox')
+                @case ('DisableTextbox') {
+                  <label for="textboxTitle">Title</label>
+                  <br>
+                  <input id="textboxTitle" type="text" [value]="this.activeComponent()?.textBox?.title" />
+                  <br>
+                  <label for="cps">Character per second</label>
+                  <br>
+                  <input
+                  id="cps"
+                    type="text"
+                    [value]="this.activeComponent()?.textBox?.characterPerSecond"
+                  />
+                  <br>
+                  <label>Content</label>
+                  <br>
+                  @for (item of this.activeComponent()?.textBox?.content; track $index) {
+                    <textarea [name]="$index" [value]="item"></textarea>
+                  }
+                  <br>
+                  <button class="btn">Add content</button>
+                }
+              }
+            </form>
+            <div class="modal-footer">
+              <button
+                type="button"
+                (click)="closeEditAction()"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="container pt-3">
       <ul class="nav nav-tabs">
         @for (scene of this.scenes(); track $index) {
@@ -115,7 +176,15 @@
             <h5 class="card-title">{{ $index + 1 }}. Action</h5>
             <p class="card-text">Type: {{ action.type }}</p>
             <div class="btn-group" role="group" aria-label="mixed style">
-              <button type="button" class="btn btn-primary">Edit</button>
+              <button
+                type="button"
+                (click)="editAction(action)"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#actionEditModal"
+              >
+                Edit
+              </button>
               <button type="button" (click)="deleteAction(action.id)" class="btn btn-danger">
                 Delete
               </button>

@@ -11,12 +11,12 @@ export declare class ScenesController {
         } | null;
     } & {
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findByProject(projectId: string): import("@prisma/client").Prisma.PrismaPromise<({
         timeline: ({
@@ -32,12 +32,12 @@ export declare class ScenesController {
         }) | null;
     } & {
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__SceneClient<{
         timeline: ({
@@ -53,29 +53,29 @@ export declare class ScenesController {
         }) | null;
     } & {
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, dto: UpdateSceneDto): import("@prisma/client").Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__SceneClient<{
         id: string;
+        projectId: string;
         title: string | null;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
         updatedAt: Date;
-        projectId: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }

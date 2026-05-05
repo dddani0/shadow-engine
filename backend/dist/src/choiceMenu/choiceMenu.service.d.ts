@@ -13,10 +13,10 @@ export declare class ChoiceMenuService {
     findByComponent(componentId: string): import("@prisma/client").Prisma.PrismaPromise<({
         choices: {
             id: string;
+            orderIndex: number;
+            label: string;
             actionId: string;
             choiceMenuId: string | null;
-            label: string;
-            orderIndex: number;
         }[];
     } & {
         id: string;
@@ -27,10 +27,10 @@ export declare class ChoiceMenuService {
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ChoiceMenuClient<{
         choices: {
             id: string;
+            orderIndex: number;
+            label: string;
             actionId: string;
             choiceMenuId: string | null;
-            label: string;
-            orderIndex: number;
         }[];
     } & {
         id: string;
