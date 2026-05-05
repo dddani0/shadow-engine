@@ -109,30 +109,45 @@
                 @case ('EnableSprite')
                 @case ('DisableSprite') {
                   <label for="spritePath">Sprite path</label>
-                  <br>
-                  <input id="spritePath" type="text" [value]="this.activeComponent()?.sprite?.path" />
+                  <br />
+                  <input
+                    id="spritePath"
+                    type="text"
+                    (input)="this.activeSpritePath.set(onTextInput($event))"
+                    [value]="this.activeSpritePath()"
+                  />
                 }
                 @case ('EnableTextbox')
                 @case ('DisableTextbox') {
                   <label for="textboxTitle">Title</label>
-                  <br>
-                  <input id="textboxTitle" type="text" [value]="this.activeComponent()?.textBox?.title" />
-                  <br>
-                  <label for="cps">Character per second</label>
-                  <br>
+                  <br />
                   <input
-                  id="cps"
+                    id="textboxTitle"
                     type="text"
-                    [value]="this.activeComponent()?.textBox?.characterPerSecond"
+                    (input)="this.activeTextboxTitle.set(onTextInput($event))"
+                    [value]="this.activeTextboxTitle()"
                   />
-                  <br>
+                  <br />
+                  <label for="cps">Character per second</label>
+                  <br />
+                  <input id="cps" type="text" [value]="this.activeTextboxCps()" />
+                  <br />
                   <label>Content</label>
-                  <br>
-                  @for (item of this.activeComponent()?.textBox?.content; track $index) {
+                  <br />
+                  @for (item of this.activeTextboxContent(); track $index) {
                     <textarea [name]="$index" [value]="item"></textarea>
+                    <br />
                   }
-                  <br>
-                  <button class="btn">Add content</button>
+                  <br />
+                  <button
+                    type="button"
+                    (click)="
+                      this.activeTextboxContent.set(this.activeTextboxContent().concat(['New']))
+                    "
+                    class="btn btn-success"
+                  >
+                    Add content
+                  </button>
                 }
               }
             </form>
@@ -145,7 +160,14 @@
               >
                 Close
               </button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+              <button
+                type="button"
+                (click)="saveEditAction(this.activeComponent()!)"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>

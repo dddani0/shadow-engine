@@ -1,4 +1,13 @@
-import { Action, Scene, Component, Sprite, Choice, Project, Timeline } from './../../api/api-types';
+import {
+  Action,
+  Scene,
+  Component,
+  Sprite,
+  Choice,
+  Project,
+  Timeline,
+  Textbox,
+} from './../../api/api-types';
 import { Component as AngularComponent, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
@@ -36,7 +45,12 @@ export class ProjectPage {
 
   //Active action
   readonly activeAction = signal<Action | null>(null);
+  //Active Components
   readonly activeComponent = signal<Component | null>(null);
+  readonly activeSpritePath = signal<string>('');
+  readonly activeTextboxTitle = signal<string>('');
+  readonly activeTextboxCps = signal<number>(0);
+  readonly activeTextboxContent = signal<string[]>([]);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -375,6 +389,13 @@ export class ProjectPage {
     this.api.getComponent(action?.componentId!).subscribe({
       next: (component) => {
         this.activeComponent.set(component);
+        if (component.sprite != null) {
+          this.activeSpritePath.set(component.sprite?.path);
+        } else if (component.textBox != null) {
+          this.activeTextboxTitle.set(component.textBox?.title!);
+          this.activeTextboxContent.set(component.textBox.content);
+          this.activeTextboxCps.set(component.textBox.characterPerSecond);
+        }
       },
     });
   }
@@ -382,10 +403,34 @@ export class ProjectPage {
   closeEditAction() {
     this.activeAction.set(null);
     this.activeComponent.set(null);
+    //
+    this.activeSpritePath.set('');
+    //
+    this.activeTextboxTitle.set('');
+    this.activeTextboxContent.set([]);
+    this.activeTextboxCps.set(0);
   }
 
-  saveEditAction() {
-
+  saveEditAction(component: Component) {
+    if (component.sprite != null) {
+      this.api
+        .updateSprite(this.activeComponent()?.sprite?.id!, {
+          path: this.activeSpritePath(),
+        })
+        .subscribe({
+          next: (s) => console.log(s),
+        });
+    } else if (component.textBox != null) {
+      this.api
+        .updateTextbox(this.activeComponent()?.textBox?.id!, {
+          title: this.activeTextboxTitle(),
+          content: this.activeTextboxContent(),
+          charPerSecond: this.activeTextboxCps(),
+        })
+        .subscribe({
+          next: (t) => console.log(t),
+        });
+    }
   }
 
   deleteAction(actionId: string) {
