@@ -84,6 +84,9 @@ export class ProjectPage {
       !this.loading(),
   );
 
+  readonly actionSwapCooldown : Number = 3000;
+  readonly actionSwapDisabled = false;
+
   constructor() {
     //Set id from route's current version.
     const id = this.route.snapshot.paramMap.get('projectId') ?? '';
@@ -382,6 +385,42 @@ export class ProjectPage {
         this.loading.set(false);
       },
     });
+  }
+
+  SwapActionUpward(action: Action) {
+    const timeline = this.activeSceneTimeline();
+    if (!timeline?.actions) return;
+
+    const actions = timeline.actions;
+    const index = actions.findIndex((a) => a.id === action.id);
+
+    if (index <= 0) return;
+
+    [actions[index - 1], actions[index]] = [actions[index], actions[index - 1]];
+
+    this.api.updateTimeline(this.activeSceneTimeline()?.id!, {
+      actions: this.activeSceneTimeline()?.actions,
+    });
+
+    this.refreshActiveTimeline();
+    this.refresh();
+  }
+
+  swapActionDownward(action: Action) {
+    const timeline = this.activeSceneTimeline();
+    if (!timeline?.actions) return;
+
+    const actions = timeline.actions;
+    const index = actions.findIndex((a) => a.id === action.id);
+
+    [actions[index + 1], actions[index]] = [actions[index], actions[index + 1]];
+
+    this.api.updateTimeline(this.activeSceneTimeline()?.id!, {
+      actions: this.activeSceneTimeline()?.actions!,
+    });
+
+    this.refreshActiveTimeline();
+    this.refresh();
   }
 
   changeScene(target: Event) {

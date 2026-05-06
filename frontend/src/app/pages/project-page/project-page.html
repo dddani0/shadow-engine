@@ -239,25 +239,54 @@
       @for (action of this.activeSceneTimeline()?.actions; track $index) {
         <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">{{ $index + 1 }}. Action</h5>
-            <p class="card-text">Type: {{ action.type }}</p>
-            <div class="btn-group" role="group" aria-label="mixed style">
-              <button type="button" class="btn btn-secondary">move up</button>
-              <button type="button" class="btn btn-secondary">move down</button>
-            </div>
-            <div class="btn-group" role="group" aria-label="mixed style">
-              <button
-                type="button"
-                (click)="editAction(action)"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#actionEditModal"
-              >
-                Edit
-              </button>
-              <button type="button" (click)="deleteAction(action.id)" class="btn btn-danger">
-                Delete
-              </button>
+            <div class="container">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title">{{ $index + 1 }}. Action</h5>
+                  <p class="card-text">Type: {{ action.type }}</p>
+                  <div class="btn-group" role="group" aria-label="mixed style">
+                    <button
+                      type="button"
+                      (click)="editAction(action)"
+                      class="btn btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#actionEditModal"
+                    >
+                      Edit
+                    </button>
+                    <button type="button" (click)="deleteAction(action.id)" class="btn btn-danger">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                @if (this.activeSceneTimeline()?.actions?.length! > 1) {
+                  <div class="col">
+                    @if ($first) {
+                      <button type="button" disabled class="btn btn-secondary">↑</button>
+                    } @else {
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="this.SwapActionUpward(this.activeSceneTimeline()!.actions[$index])"
+                      >
+                        ↑
+                      </button>
+                    }
+                    <br />
+                    @if ($last) {
+                      <button type="button" disabled class="btn btn-secondary">↓</button>
+                    } @else {
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="this.SwapActionUpward(this.activeSceneTimeline()!.actions[$index])"
+                      >
+                        ↓
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
             </div>
           </div>
         </div>
