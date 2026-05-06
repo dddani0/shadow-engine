@@ -210,6 +210,10 @@
             <h5 class="card-title">{{ $index + 1 }}. Action</h5>
             <p class="card-text">Type: {{ action.type }}</p>
             <div class="btn-group" role="group" aria-label="mixed style">
+              <button type="button" class="btn btn-secondary">move up</button>
+              <button type="button" class="btn btn-secondary">move down</button>
+            </div>
+            <div class="btn-group" role="group" aria-label="mixed style">
               <button
                 type="button"
                 (click)="editAction(action)"

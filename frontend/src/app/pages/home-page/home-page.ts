@@ -18,6 +18,8 @@ export class HomePage {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
 
+  readonly selectedProjectForDelete = signal<Project | null>(null);
+
   readonly newTitle = signal('');
   readonly newDescription = signal('');
 
@@ -27,7 +29,7 @@ export class HomePage {
 
   readonly canCreate = computed(() => this.newTitle().trim().length > 0 && !this.loading());
 
-  allowedProjectLimit : number = 2;
+  allowedProjectLimit: number = 2;
 
   constructor() {
     this.refresh();
@@ -69,11 +71,13 @@ export class HomePage {
       });
   }
 
-  deleteProject(id: string) {
-    if (!confirm('Delete this project?')) return;
+  deleteProject() {
     this.loading.set(true);
-    this.api.deleteProject(id).subscribe({
-      next: () => this.refresh(),
+    this.api.deleteProject(this.selectedProjectForDelete()?.id!).subscribe({
+      next: () => {
+        this.refresh();
+        this.selectedProjectForDelete.set(null);
+      },
       error: (e) => {
         this.error.set(this.formatError(e));
         this.loading.set(false);
