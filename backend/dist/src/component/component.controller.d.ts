@@ -19,6 +19,12 @@ export declare class ComponentController {
             createdAt: Date;
             updatedAt: Date;
         };
+        choiceMenu: {
+            id: string;
+            title: string | null;
+            description: string | null;
+            componentId: string | null;
+        } | null;
         sprite: {
             path: string;
             id: string;
@@ -27,7 +33,7 @@ export declare class ComponentController {
         textBox: {
             id: string;
             title: string | null;
-            componentId: string;
+            componentId: string | null;
             content: string[];
             charPerSecond: number;
         } | null;
@@ -46,6 +52,12 @@ export declare class ComponentController {
             createdAt: Date;
             updatedAt: Date;
         };
+        choiceMenu: {
+            id: string;
+            title: string | null;
+            description: string | null;
+            componentId: string | null;
+        } | null;
         sprite: {
             path: string;
             id: string;
@@ -54,7 +66,7 @@ export declare class ComponentController {
         textBox: {
             id: string;
             title: string | null;
-            componentId: string;
+            componentId: string | null;
             content: string[];
             charPerSecond: number;
         } | null;
@@ -81,7 +93,7 @@ export declare class ComponentController {
         textBox: {
             id: string;
             title: string | null;
-            componentId: string;
+            componentId: string | null;
             content: string[];
             charPerSecond: number;
         } | null;

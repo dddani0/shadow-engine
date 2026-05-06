@@ -9,7 +9,6 @@ export class ComponentService {
 
   async create(dto: CreateComponentDto) {
     // Validate that the scene exists
-    console.log(dto.sceneId);
     const scene = await this.prisma.scene.findUnique({
       where: { id: dto.sceneId },
     });
@@ -30,6 +29,19 @@ export class ComponentService {
               },
             }
           : undefined,
+        textBox: dto.textbox
+          ? {
+              create: {
+                content: [],
+                charPerSecond: 5,
+              },
+            }
+          : undefined,
+        choiceMenu: dto.choiceMenu
+          ? {
+              create: {},
+            }
+          : undefined,
       },
     });
   }
@@ -40,6 +52,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }
@@ -51,6 +64,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }
@@ -92,6 +106,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }
@@ -109,6 +124,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }

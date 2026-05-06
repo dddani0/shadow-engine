@@ -9,11 +9,7 @@ export declare class PlaybackController {
             metadata: import("@prisma/client/runtime/client").JsonValue;
             orderIndex: number;
         };
-        choices: {
-            id: string;
-            toSceneId: string;
-            label: string;
-        }[];
+        choices?: undefined;
     } | {
         scene: null;
         choices: never[];

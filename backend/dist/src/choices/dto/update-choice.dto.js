@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateChoiceDto = void 0;
 class UpdateChoiceDto {
-    toSceneId;
+    actionId;
     label;
     orderIndex;
 }

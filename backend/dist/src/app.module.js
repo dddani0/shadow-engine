@@ -20,6 +20,8 @@ const component_module_1 = require("./component/component.module");
 const timeline_module_1 = require("./timeline/timeline.module");
 const action_module_1 = require("./action/action.module");
 const sprite_module_1 = require("./sprite/sprite.module");
+const textbox_module_1 = require("./textbox/textbox.module");
+const choiceMenu_module_1 = require("./choiceMenu/choiceMenu.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -31,11 +33,13 @@ exports.AppModule = AppModule = __decorate([
             projects_module_1.ProjectsModule,
             scenes_module_1.ScenesModule,
             choices_module_1.ChoicesModule,
+            choiceMenu_module_1.ChoiceMenuModule,
             playback_module_1.PlaybackModule,
             component_module_1.ComponentModule,
             timeline_module_1.TimelineModule,
             action_module_1.ActionModule,
             sprite_module_1.SpriteModule,
+            textbox_module_1.TextboxModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

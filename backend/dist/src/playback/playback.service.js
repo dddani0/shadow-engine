@@ -21,12 +21,7 @@ let PlaybackService = class PlaybackService {
         if (sceneId) {
             const scene = await this.prisma.scene.findFirstOrThrow({
                 where: { id: sceneId, projectId },
-                include: {
-                    choicesFrom: {
-                        orderBy: { orderIndex: 'asc' },
-                        select: { id: true, label: true, toSceneId: true },
-                    },
-                },
+                include: {},
             });
             return {
                 scene: {
@@ -35,18 +30,12 @@ let PlaybackService = class PlaybackService {
                     metadata: scene.metadata,
                     orderIndex: scene.orderIndex,
                 },
-                choices: scene.choicesFrom,
             };
         }
         const firstScene = await this.prisma.scene.findFirst({
             where: { projectId },
             orderBy: { orderIndex: 'asc' },
-            include: {
-                choicesFrom: {
-                    orderBy: { orderIndex: 'asc' },
-                    select: { id: true, label: true, toSceneId: true },
-                },
-            },
+            include: {},
         });
         if (!firstScene) {
             return { scene: null, choices: [] };
@@ -58,7 +47,6 @@ let PlaybackService = class PlaybackService {
                 metadata: firstScene.metadata,
                 orderIndex: firstScene.orderIndex,
             },
-            choices: firstScene.choicesFrom,
         };
     }
 };

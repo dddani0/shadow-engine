@@ -42,7 +42,7 @@
         } @else {
           <div class="btnRow">
             @for (c of payload()!.choices; track c.id) {
-              <button class="primary" (click)="choose(c.toSceneId)">{{ c.label }}</button>
+              <button class="primary" >{{ c.label }}</button>
             }
           </div>
         }

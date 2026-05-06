@@ -18,7 +18,6 @@ let ComponentService = class ComponentService {
         this.prisma = prisma;
     }
     async create(dto) {
-        console.log(dto.sceneId);
         const scene = await this.prisma.scene.findUnique({
             where: { id: dto.sceneId },
         });
@@ -37,6 +36,19 @@ let ComponentService = class ComponentService {
                         },
                     }
                     : undefined,
+                textBox: dto.textbox
+                    ? {
+                        create: {
+                            content: [],
+                            charPerSecond: 5,
+                        },
+                    }
+                    : undefined,
+                choiceMenu: dto.choiceMenu
+                    ? {
+                        create: {},
+                    }
+                    : undefined,
             },
         });
     }
@@ -46,6 +58,7 @@ let ComponentService = class ComponentService {
                 sprite: true,
                 textBox: true,
                 scene: true,
+                choiceMenu: true,
             },
         });
     }
@@ -56,6 +69,7 @@ let ComponentService = class ComponentService {
                 sprite: true,
                 textBox: true,
                 scene: true,
+                choiceMenu: true,
             },
         });
     }
@@ -78,6 +92,8 @@ let ComponentService = class ComponentService {
                     },
                 },
             };
+        }
+        if (dto.choiceMenu !== undefined) {
         }
         return this.prisma.component.update({
             where: { id },

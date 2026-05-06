@@ -20,35 +20,31 @@ let ChoicesService = class ChoicesService {
     create(dto) {
         return this.prisma.choice.create({
             data: {
-                fromSceneId: dto.fromSceneId,
-                toSceneId: dto.toSceneId,
+                actionId: dto.actionId,
                 label: dto.label,
                 orderIndex: dto.orderIndex ?? 0,
             },
         });
     }
-    findByScene(sceneId) {
+    findByAction(actionId) {
         return this.prisma.choice.findMany({
-            where: { fromSceneId: sceneId },
+            where: { actionId: actionId },
             orderBy: { orderIndex: 'asc' },
-            include: {
-                toScene: { select: { id: true, title: true } },
-            },
+            include: {},
         });
     }
     findOne(id) {
         return this.prisma.choice.findUniqueOrThrow({
             where: { id },
-            include: { fromScene: true, toScene: true },
+            include: {},
         });
     }
     update(id, dto) {
         return this.prisma.choice.update({
             where: { id },
             data: {
-                ...(dto.toSceneId !== undefined && { toSceneId: dto.toSceneId }),
-                ...(dto.label !== undefined && { label: dto.label }),
-                ...(dto.orderIndex !== undefined && { orderIndex: dto.orderIndex }),
+                actionId: dto.actionId,
+                label: dto.label,
             },
         });
     }

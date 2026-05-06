@@ -1,5 +1,5 @@
 export class UpdateChoiceDto {
-  toSceneId?: string;
+  actionId?: string;
   label?: string;
   orderIndex?: number;
 }

@@ -7,8 +7,6 @@
         <samp class="pb-3">
           @if (this.project()?.description) {
             {{ this.project()?.description }}
-          } @else {
-            No description set.
           }
         </samp>
       </div>
@@ -17,20 +15,30 @@
           Play
         </button>
         <button
-          type="button"
-          class="btn btn-outline-secondary"
-          data-bs-toggle="modal"
-          data-bs-target="#editModal"
-        >
-          Edit
-        </button>
-        <button
           [disabled]="loading()"
           (click)="refresh()"
           type="button"
           class="btn btn-outline-primary"
         >
           Refresh
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-toggle="modal"
+          data-bs-target="#editModal"
+          (click)="this.editProjectAttributes()"
+        >
+          Edit
+        </button>
+        <button
+          data-bs-toggle="modal"
+          data-bs-target="#variableModal"
+          class="btn btn-outline-warning"
+          type="button"
+          class="btn btn-outline-warning"
+        >
+          Variables
         </button>
       </div>
     </div>
@@ -45,7 +53,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="editModalLabel">Edit {{ this.project()?.title }}</h1>
+            <h1 class="modal-title fs-5" id="editModalLabel">
+              Edit "{{ this.project()?.title }}" project
+            </h1>
             <button
               type="button"
               class="btn-close"
@@ -61,7 +71,8 @@
                   type="text"
                   class="form-control"
                   id="projectTitle"
-                  [value]="this.project()?.title"
+                  (input)="this.activeProjectTitle.set(onTextInput($event))"
+                  [value]="this.activeProjectTitle()"
                 />
               </div>
               <div class="mb-3">
@@ -69,19 +80,143 @@
                 <textarea
                   class="form-control"
                   id="projectDescription"
-                  [value]="this.project()?.description"
+                  (input)="this.activeProjectDescription.set(onTextInput($event))"
+                  [value]="this.activeProjectDescription()"
                 ></textarea>
               </div>
             </form>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                (click)="this.saveProjectAttributes()"
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- Navbar (scenes) -->
+    <!-- Action edit modal -->
+    <div
+      class="modal fade"
+      id="actionEditModal"
+      tabindex="-1"
+      aria-labelledby="Edit action"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Edit "{{ this.activeAction()?.type }}" action</h2>
+          </div>
+          <div class="modal-body">
+            <form>
+              @switch (this.activeAction()?.type) {
+                @case ('EnableSprite')
+                @case ('DisableSprite') {
+                  <label for="spritePath">Sprite path</label>
+                  <br />
+                  <input
+                    id="spritePath"
+                    type="text"
+                    (input)="this.activeSpritePath.set(onTextInput($event))"
+                    [value]="this.activeSpritePath()"
+                  />
+                }
+                @case ('EnableTextbox')
+                @case ('DisableTextbox') {
+                  <label for="textboxTitle">Title</label>
+                  <br />
+                  <input
+                    id="textboxTitle"
+                    type="text"
+                    (input)="this.activeTextboxTitle.set(onTextInput($event))"
+                    [value]="this.activeTextboxTitle()"
+                  />
+                  <br />
+                  <label for="cps">Character per second</label>
+                  <br />
+                  <input id="cps" type="text" [value]="this.activeTextboxCps()" />
+                  <br />
+                  <label>Content</label>
+                  <br />
+                  @for (item of this.activeTextboxContent(); track $index) {
+                    <textarea [name]="$index" [value]="item"></textarea>
+                    <br />
+                  }
+                  <br />
+                  <button
+                    type="button"
+                    (click)="
+                      this.activeTextboxContent.set(this.activeTextboxContent().concat(['New']))
+                    "
+                    class="btn btn-success"
+                  >
+                    Add content
+                  </button>
+                }
+                @case ('EnableChoiceMenu')
+                @case ('DisableChoiceMenu') {
+                  <label for="spritePath">Choice menu title</label>
+                  <br />
+                  <input
+                    id="choiceMenuTitle"
+                    type="text"
+                    (input)="this.activeChoiceMenuTitle.set(onTextInput($event))"
+                    [value]="this.activeChoiceMenuTitle()"
+                  />
+                  <br />
+                  <label for="choiceDescription">Choice menu description</label>
+                  <br />
+                  <textarea
+                    id="choiceDescription"
+                    type="text"
+                    (input)="this.activeChoiceMenuDescription.set(onTextInput($event))"
+                    [value]="this.activeChoiceMenuDescription()"
+                  ></textarea>
+                  <br />
+                  <label>Choices</label>
+                  <br />
+                  @for (item of this.activeComponent()?.choiceMenu?.choices; track $index) {
+                    {{ item }}
+                  }
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    (click)="this.activeChoiceMenuChoices.set([])"
+                  >
+                    Add choice
+                  </button>
+                }
+              }
+            </form>
+            <div class="modal-footer">
+              <button
+                type="button"
+                (click)="closeEditAction()"
+                class="btn btn-outline-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                (click)="saveEditAction(this.activeComponent()!)"
+                class="btn btn-outline-success"
+                data-bs-dismiss="modal"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Scene navbar -->
     <div class="container pt-3">
       <ul class="nav nav-tabs">
         @for (scene of this.scenes(); track $index) {
@@ -98,46 +233,108 @@
         </li>
       </ul>
     </div>
-    <div class="container-fluid pt-3">
+    <!-- Timeline -->
+    <div class="container pt-3">
       <h2>Timeline</h2>
-      <div class="d-flex">
-        @for (action of this.activeSceneTimeline()?.actions; track $index) {
-          <div class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">{{ $index + 1 }}. Action</h5>
-              <p class="card-text">Type: {{ action.type }}</p>
-              <div class="btn-group" role="group" aria-label="mixed style">
-                <button type="button" class="btn btn-primary">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+      @for (action of this.activeSceneTimeline()?.actions; track $index) {
+        <div class="card text-center">
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title">{{ $index + 1 }}. Action</h5>
+                  <p class="card-text">Type: {{ action.type }}</p>
+                  <div class="btn-group" role="group" aria-label="mixed style">
+                    <button
+                      type="button"
+                      (click)="editAction(action)"
+                      class="btn btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#actionEditModal"
+                    >
+                      Edit
+                    </button>
+                    <button type="button" (click)="deleteAction(action.id)" class="btn btn-danger">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                @if (this.activeSceneTimeline()?.actions?.length! > 1) {
+                  <div class="col">
+                    @if ($first) {
+                      <button type="button" disabled class="btn btn-secondary">↑</button>
+                    } @else {
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="this.SwapActionUpward(this.activeSceneTimeline()!.actions[$index])"
+                      >
+                        ↑
+                      </button>
+                    }
+                    <br />
+                    @if ($last) {
+                      <button type="button" disabled class="btn btn-secondary">↓</button>
+                    } @else {
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="this.SwapActionUpward(this.activeSceneTimeline()!.actions[$index])"
+                      >
+                        ↓
+                      </button>
+                    }
+                  </div>
+                }
               </div>
             </div>
           </div>
-        }
-        <div class="card text-center">
-          <div class="card-body">
-            <h5 class="card-title">Add action</h5>
-            <div class="dropdown">
-              <button
-                type="button"
-                class="btn btn-secondary dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Add Action
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" (click)="this.createAction('EnableSprite')"
-                    >Enable sprite</a
-                  >
-                </li>
-                <li><a class="dropdown-item" href="#">Disable sprite</a></li>
-                <li><a class="dropdown-item" href="#">Enable textbox</a></li>
-                <li><a class="dropdown-item" href="#">Disable textbox</a></li>
-                <li><a class="dropdown-item" href="#">Enable choice menu</a></li>
-                <li><a class="dropdown-item" href="#">Disable choice menu</a></li>
-              </ul>
-            </div>
+        </div>
+      }
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Add action</h5>
+          <div class="dropdown">
+            <button
+              type="button"
+              class="btn btn-outline-primary dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Add Action
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('EnableSprite')"
+                  >Enable sprite</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('DisableSprite')"
+                  >Disable sprite</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('EnableTextbox')"
+                  >Enable textbox</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('DisableTextbox')"
+                  >Disable textbox</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('EnableChoiceMenu')"
+                  >Enable choice menu</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('DisableChoiceMenu')"
+                  >Disable choice menu</a
+                >
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -175,13 +372,6 @@
           </div>
         </div>
       </div>
-      <button
-        data-bs-toggle="modal"
-        data-bs-target="#variableModal"
-        class="btn btn-outline-warning"
-      >
-        Variable management
-      </button>
     </div>
   </div>
 </div>

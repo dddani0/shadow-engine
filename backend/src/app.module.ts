@@ -11,6 +11,8 @@ import { ComponentModule } from './component/component.module';
 import { TimelineModule } from './timeline/timeline.module';
 import { ActionModule } from './action/action.module';
 import { SpriteModule } from './sprite/sprite.module';
+import { TextboxModule } from './textbox/textbox.module';
+import { ChoiceMenuModule } from './choiceMenu/choiceMenu.module';
 
 @Module({
   imports: [
@@ -19,11 +21,13 @@ import { SpriteModule } from './sprite/sprite.module';
     ProjectsModule,
     ScenesModule,
     ChoicesModule,
+    ChoiceMenuModule,
     PlaybackModule,
     ComponentModule,
     TimelineModule,
     ActionModule,
     SpriteModule,
+    TextboxModule,
   ],
   controllers: [AppController],
   providers: [AppService],

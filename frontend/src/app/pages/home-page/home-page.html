@@ -72,6 +72,41 @@
       </div>
     </div>
   </div>
+  <div
+    class="modal fade"
+    id="deleteProjectModal"
+    tabindex="-1"
+    aria-labelledby="Delete project"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editModalLabel">Delete the project</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete the project?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+              (click)="deleteProject()"
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="container mb-3">
     <div class="container">
       <div class="row">
@@ -104,7 +139,7 @@
                   <div class="card">
                     <div class="card-body">
                       <h3 class="card-title">{{ p.title }}</h3>
-                      <p class="card-text">{{ p.description ?? ' No description.' }}</p>
+                      <p class="card-text">{{ p.description ?? '-' }}</p>
                       <div class="btn-group" role="group" aria-label="card button">
                         <button [routerLink]="['/play', p.id]" class="btn btn-outline-primary">
                           Play
@@ -112,7 +147,12 @@
                         <button [routerLink]="['/projects', p.id]" class="btn btn-outline-success">
                           Edit
                         </button>
-                        <button class="btn btn-outline-danger" (click)="deleteProject(p.id)">
+                        <button
+                          class="btn btn-outline-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteProjectModal"
+                          (click)="this.selectedProjectForDelete.set(p)"
+                        >
                           Delete
                         </button>
                       </div>

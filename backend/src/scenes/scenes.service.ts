@@ -40,7 +40,6 @@ export class ScenesService {
     return this.prisma.scene.findUniqueOrThrow({
       where: { id },
       include: {
-        choicesFrom: { orderBy: { orderIndex: 'asc' } },
         timeline: {
           include: {
             actions: true,

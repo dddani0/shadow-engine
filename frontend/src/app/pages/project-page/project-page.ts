@@ -1,13 +1,23 @@
-import { Action, Scene, Sprite, Choice, Project, Timeline } from './../../api/api-types';
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Action,
+  Scene,
+  Component,
+  Sprite,
+  Choice,
+  Project,
+  Timeline,
+  Textbox,
+} from './../../api/api-types';
+import { Component as AngularComponent, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
+import { errorContext } from 'rxjs/internal/util/errorContext';
 
 /*
 
  */
 
-@Component({
+@AngularComponent({
   selector: 'app-project-page',
   imports: [RouterLink],
   templateUrl: './project-page.html',
@@ -19,11 +29,15 @@ export class ProjectPage {
   //Current project
   readonly projectId = signal<string>('');
   readonly project = signal<Project | null>(null);
+
+  readonly activeProjectTitle = signal<string>('');
+  readonly activeProjectDescription = signal<string>('');
+
   //Current scene
   readonly scenes = signal<Scene[]>([]);
   //The starting scene in the project (always the first scene in case of new project)
   readonly startSceneId = signal<string>('');
-  //??
+  //GET RID OF NEXT TIME
   readonly sceneChoice = signal<Record<string, Choice[]>>({});
 
   //The id of the currently active scene.
@@ -32,6 +46,18 @@ export class ProjectPage {
   readonly activeScene = signal<Scene | null>(null);
   //Active timeline
   readonly activeSceneTimeline = signal<Timeline | undefined>(undefined);
+
+  //Active action
+  readonly activeAction = signal<Action | null>(null);
+  //Active Components
+  readonly activeComponent = signal<Component | null>(null);
+  readonly activeSpritePath = signal<string>('');
+  readonly activeTextboxTitle = signal<string>('');
+  readonly activeTextboxCps = signal<number>(0);
+  readonly activeTextboxContent = signal<string[]>([]);
+  readonly activeChoiceMenuTitle = signal<string>('');
+  readonly activeChoiceMenuDescription = signal<string>('');
+  readonly activeChoiceMenuChoices = signal<Choice[]>([]);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -57,6 +83,9 @@ export class ProjectPage {
       this.choiceLabel().trim().length > 0 &&
       !this.loading(),
   );
+
+  readonly actionSwapCooldown : Number = 3000;
+  readonly actionSwapDisabled = false;
 
   constructor() {
     //Set id from route's current version.
@@ -101,15 +130,9 @@ export class ProjectPage {
           //Load the timeline for the active scene
           this.loadActiveSceneTimeline();
           //Update the project's data in the database according to the change
-          this.api
-            .updateProject(projectId, {
-              startSceneId: this.startSceneId()!,
-            })
-            .subscribe({
-              next: (p) => {
-                console.log(p);
-              },
-            });
+          this.api.updateProject(projectId, {
+            startSceneId: this.startSceneId()!,
+          });
         } else {
           // startSceneId already exists - set it and load timeline
           this.startSceneId.set(project.startSceneId);
@@ -193,7 +216,7 @@ export class ProjectPage {
   createAction(type: string) {
     switch (type) {
       case 'EnableSprite':
-        console.log('clicked');
+      case 'DisableSprite':
         //Create sprite
         this.api.createSprite({ path: 'Path' }).subscribe({
           next: (sprite) => {
@@ -235,7 +258,86 @@ export class ProjectPage {
           },
         });
         break;
+      case 'EnableTextbox':
+      case 'DisableTextbox':
+        this.api
+          .createTextbox({
+            content: [],
+            charPerSecond: 5,
+          })
+          .subscribe({
+            next: (textbox) => {
+              this.api
+                .createComponent({
+                  sceneId: this.activeSceneId(),
+                  title: this.newComponentTitle(),
+                  textbox: textbox,
+                })
+                .subscribe({
+                  next: (component) => {
+                    this.api
+                      .createAction({
+                        type: type,
+                        timelineId: this.activeScene()?.timeline.id!,
+                        componentId: component.id,
+                      })
+                      .subscribe({
+                        next: () => {
+                          this.refreshActiveTimeline();
+                        },
+                        error: (e) => {
+                          this.error.set(this.formatError(e));
+                          this.loading.set(false);
+                        },
+                      });
+                  },
+                });
+            },
+          });
+        break;
+      case 'EnableChoiceMenu':
+      case 'DisableChoiceMenu':
+        this.api.createChoiceMenu({}).subscribe({
+          next: (choiceMenu) => {
+            this.api
+              .createComponent({
+                sceneId: this.activeSceneId(),
+                title: this.newComponentTitle(),
+                choiceMenu: choiceMenu,
+              })
+              .subscribe({
+                next: (component) => {
+                  this.api
+                    .createAction({
+                      type: type,
+                      timelineId: this.activeScene()?.timeline.id!,
+                      componentId: component.id,
+                    })
+                    .subscribe({
+                      next: () => {
+                        this.refreshActiveTimeline();
+                      },
+                      error: (e) => {
+                        this.error.set(this.formatError(e));
+                        this.loading.set(false);
+                      },
+                    });
+                },
+              });
+          },
+        });
+        break;
+      default:
+        throw errorContext(() => console.log('No such event:' + type));
     }
+  }
+
+  getAction(componentId: string) {
+    this.api.getComponent(componentId).subscribe({
+      next: (comp) => {
+        return comp;
+      },
+    });
   }
 
   deleteScene(sceneId: string) {
@@ -285,6 +387,42 @@ export class ProjectPage {
     });
   }
 
+  SwapActionUpward(action: Action) {
+    const timeline = this.activeSceneTimeline();
+    if (!timeline?.actions) return;
+
+    const actions = timeline.actions;
+    const index = actions.findIndex((a) => a.id === action.id);
+
+    if (index <= 0) return;
+
+    [actions[index - 1], actions[index]] = [actions[index], actions[index - 1]];
+
+    this.api.updateTimeline(this.activeSceneTimeline()?.id!, {
+      actions: this.activeSceneTimeline()?.actions,
+    });
+
+    this.refreshActiveTimeline();
+    this.refresh();
+  }
+
+  swapActionDownward(action: Action) {
+    const timeline = this.activeSceneTimeline();
+    if (!timeline?.actions) return;
+
+    const actions = timeline.actions;
+    const index = actions.findIndex((a) => a.id === action.id);
+
+    [actions[index + 1], actions[index]] = [actions[index], actions[index + 1]];
+
+    this.api.updateTimeline(this.activeSceneTimeline()?.id!, {
+      actions: this.activeSceneTimeline()?.actions!,
+    });
+
+    this.refreshActiveTimeline();
+    this.refresh();
+  }
+
   changeScene(target: Event) {
     const targetId = (target.currentTarget as HTMLElement).id;
     this.activeSceneId.set(targetId);
@@ -292,9 +430,106 @@ export class ProjectPage {
     this.loadActiveSceneTimeline();
   }
 
+  editProjectAttributes() {
+    this.activeProjectTitle.set(this.project()?.title!);
+    this.activeProjectDescription.set(this.project()?.description!);
+  }
+
+  saveProjectAttributes() {
+    this.api
+      .updateProject(this.projectId(), {
+        title: this.activeProjectTitle(),
+        description:
+          this.activeProjectDescription() === '' ? null : this.activeProjectDescription(),
+      })
+      .subscribe({
+        next: (p) => {
+          console.log(p);
+          this.refresh();
+        },
+      });
+  }
+
+  editAction(action: Action) {
+    this.activeAction.set(action);
+    this.api.getComponent(action?.componentId!).subscribe({
+      next: (component) => {
+        this.activeComponent.set(component);
+        if (component.sprite != null) {
+          console.log('Component is a sprite');
+          this.activeSpritePath.set(component.sprite?.path);
+        } else if (component.textBox != null) {
+          console.log('Component is a textbox');
+          this.activeTextboxTitle.set(component.textBox?.title!);
+          this.activeTextboxContent.set(component.textBox.content);
+          this.activeTextboxCps.set(component.textBox.characterPerSecond);
+        } else if (component.choiceMenu != null) {
+          console.log('Component is a choicemenu');
+          this.activeChoiceMenuTitle.set(component.choiceMenu?.title!);
+          this.activeChoiceMenuDescription.set(component.choiceMenu?.description!);
+          this.activeChoiceMenuChoices.set(component.choiceMenu?.choices!);
+        }
+      },
+    });
+  }
+
+  closeEditAction() {
+    this.activeAction.set(null);
+    this.activeComponent.set(null);
+    //
+    this.activeSpritePath.set('');
+    //
+    this.activeTextboxTitle.set('');
+    this.activeTextboxContent.set([]);
+    this.activeTextboxCps.set(0);
+    //
+    this.activeChoiceMenuTitle.set('');
+    this.activeChoiceMenuDescription.set('');
+    this.activeChoiceMenuChoices.set([]);
+  }
+
+  saveEditAction(component: Component) {
+    if (component.sprite != null) {
+      this.api
+        .updateSprite(this.activeComponent()?.sprite?.id!, {
+          path: this.activeSpritePath(),
+        })
+        .subscribe({
+          next: (s) => console.log(s),
+        });
+    } else if (component.textBox != null) {
+      this.api
+        .updateTextbox(this.activeComponent()?.textBox?.id!, {
+          title: this.activeTextboxTitle(),
+          content: this.activeTextboxContent(),
+          charPerSecond: this.activeTextboxCps(),
+        })
+        .subscribe({
+          next: (t) => console.log(t),
+        });
+    } else if (component.choiceMenu != null) {
+      this.api
+        .updateChoiceMenu(component.choiceMenu.id, {
+          title: this.activeChoiceMenuTitle(),
+          description: this.activeChoiceMenuDescription(),
+          choices: this.activeChoiceMenuChoices(),
+        })
+        .subscribe({
+          next: (c) => console.log(c),
+        });
+    }
+  }
+
+  deleteAction(actionId: string) {
+    this.api.deleteAction(actionId).subscribe({
+      next: () => {
+        this.refreshActiveTimeline();
+      },
+    });
+  }
+
   private loadActiveSceneTimeline() {
     const activeSceneId = this.activeSceneId();
-    console.log(this.activeSceneId());
     if (!activeSceneId) return;
 
     this.api.getScene(activeSceneId).subscribe({

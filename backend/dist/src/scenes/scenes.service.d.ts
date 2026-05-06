@@ -52,13 +52,6 @@ export declare class ScenesService {
             id: string;
             sceneId: string;
         }) | null;
-        choicesFrom: {
-            id: string;
-            orderIndex: number;
-            fromSceneId: string;
-            toSceneId: string;
-            label: string;
-        }[];
     } & {
         id: string;
         projectId: string;
