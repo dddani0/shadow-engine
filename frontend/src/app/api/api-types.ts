@@ -73,6 +73,7 @@ export interface Component {
   title: String;
   sprite?: Sprite;
   textBox?: Textbox;
+  choiceMenu?: ChoiceMenu
 }
 
 export interface Action {

@@ -37,7 +37,7 @@ export class ProjectPage {
   readonly scenes = signal<Scene[]>([]);
   //The starting scene in the project (always the first scene in case of new project)
   readonly startSceneId = signal<string>('');
-  //??
+  //GET RID OF NEXT TIME
   readonly sceneChoice = signal<Record<string, Choice[]>>({});
 
   //The id of the currently active scene.
@@ -55,6 +55,9 @@ export class ProjectPage {
   readonly activeTextboxTitle = signal<string>('');
   readonly activeTextboxCps = signal<number>(0);
   readonly activeTextboxContent = signal<string[]>([]);
+  readonly activeChoiceMenuTitle = signal<string>('');
+  readonly activeChoiceMenuDescription = signal<string>('');
+  readonly activeChoiceMenuChoices = signal<Choice[]>([]);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -414,11 +417,18 @@ export class ProjectPage {
       next: (component) => {
         this.activeComponent.set(component);
         if (component.sprite != null) {
+          console.log('Component is a sprite');
           this.activeSpritePath.set(component.sprite?.path);
         } else if (component.textBox != null) {
+          console.log('Component is a textbox');
           this.activeTextboxTitle.set(component.textBox?.title!);
           this.activeTextboxContent.set(component.textBox.content);
           this.activeTextboxCps.set(component.textBox.characterPerSecond);
+        } else if (component.choiceMenu != null) {
+          console.log('Component is a choicemenu');
+          this.activeChoiceMenuTitle.set(component.choiceMenu?.title!);
+          this.activeChoiceMenuDescription.set(component.choiceMenu?.description!);
+          this.activeChoiceMenuChoices.set(component.choiceMenu?.choices!);
         }
       },
     });
@@ -433,6 +443,10 @@ export class ProjectPage {
     this.activeTextboxTitle.set('');
     this.activeTextboxContent.set([]);
     this.activeTextboxCps.set(0);
+    //
+    this.activeChoiceMenuTitle.set('');
+    this.activeChoiceMenuDescription.set('');
+    this.activeChoiceMenuChoices.set([]);
   }
 
   saveEditAction(component: Component) {
@@ -453,6 +467,16 @@ export class ProjectPage {
         })
         .subscribe({
           next: (t) => console.log(t),
+        });
+    } else if (component.choiceMenu != null) {
+      this.api
+        .updateChoiceMenu(component.choiceMenu.id, {
+          title: this.activeChoiceMenuTitle(),
+          description: this.activeChoiceMenuDescription(),
+          choices: this.activeChoiceMenuChoices(),
+        })
+        .subscribe({
+          next: (c) => console.log(c),
         });
     }
   }

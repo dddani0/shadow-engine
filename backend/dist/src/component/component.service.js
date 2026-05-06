@@ -44,6 +44,11 @@ let ComponentService = class ComponentService {
                         },
                     }
                     : undefined,
+                choiceMenu: dto.choiceMenu
+                    ? {
+                        create: {},
+                    }
+                    : undefined,
             },
         });
     }
@@ -53,6 +58,7 @@ let ComponentService = class ComponentService {
                 sprite: true,
                 textBox: true,
                 scene: true,
+                choiceMenu: true,
             },
         });
     }
@@ -63,6 +69,7 @@ let ComponentService = class ComponentService {
                 sprite: true,
                 textBox: true,
                 scene: true,
+                choiceMenu: true,
             },
         });
     }
@@ -85,6 +92,8 @@ let ComponentService = class ComponentService {
                     },
                 },
             };
+        }
+        if (dto.choiceMenu !== undefined) {
         }
         return this.prisma.component.update({
             where: { id },

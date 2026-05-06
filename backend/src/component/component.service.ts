@@ -37,6 +37,11 @@ export class ComponentService {
               },
             }
           : undefined,
+        choiceMenu: dto.choiceMenu
+          ? {
+              create: {},
+            }
+          : undefined,
       },
     });
   }
@@ -47,6 +52,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }
@@ -58,6 +64,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }
@@ -99,6 +106,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }
@@ -116,6 +124,7 @@ export class ComponentService {
         sprite: true,
         textBox: true,
         scene: true,
+        choiceMenu: true,
       },
     });
   }

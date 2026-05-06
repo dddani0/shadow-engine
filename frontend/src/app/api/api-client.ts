@@ -11,7 +11,7 @@ import {
   Sprite,
   Textbox,
   Timeline,
-  ChoiceMenu
+  ChoiceMenu,
 } from './api-types';
 
 @Injectable({ providedIn: 'root' })
@@ -127,6 +127,18 @@ export class ApiClient {
     choices?: Choice[];
   }) {
     return this.http.post<ChoiceMenu>(`${this.baseUrl}/choiceMenu`, body);
+  }
+
+  updateChoiceMenu(
+    id: string,
+    body: {
+      title?: string;
+      description?: string;
+      componentId?: string;
+      choices?: Choice[];
+    },
+  ) {
+    return this.http.patch<ChoiceMenu>(`${this.baseUrl}/choiceMenu/${id}`, body);
   }
 
   // Playback

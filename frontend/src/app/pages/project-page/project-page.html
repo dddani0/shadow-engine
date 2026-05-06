@@ -7,8 +7,6 @@
         <samp class="pb-3">
           @if (this.project()?.description) {
             {{ this.project()?.description }}
-          } @else {
-            No description set.
           }
         </samp>
       </div>
@@ -102,7 +100,7 @@
         </div>
       </div>
     </div>
-    <!-- Navbar (scenes) -->
+    <!-- Action edit modal -->
     <div
       class="modal fade"
       id="actionEditModal"
@@ -161,13 +159,46 @@
                     Add content
                   </button>
                 }
+                @case ('EnableChoiceMenu')
+                @case ('DisableChoiceMenu') {
+                  <label for="spritePath">Choice menu title</label>
+                  <br />
+                  <input
+                    id="choiceMenuTitle"
+                    type="text"
+                    (input)="this.activeChoiceMenuTitle.set(onTextInput($event))"
+                    [value]="this.activeChoiceMenuTitle()"
+                  />
+                  <br />
+                  <label for="choiceDescription">Choice menu description</label>
+                  <br />
+                  <textarea
+                    id="choiceDescription"
+                    type="text"
+                    (input)="this.activeChoiceMenuDescription.set(onTextInput($event))"
+                    [value]="this.activeChoiceMenuDescription()"
+                  ></textarea>
+                  <br />
+                  <label>Choices</label>
+                  <br />
+                  @for (item of this.activeComponent()?.choiceMenu?.choices; track $index) {
+                    {{ item }}
+                  }
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    (click)="this.activeChoiceMenuChoices.set([])"
+                  >
+                    Add choice
+                  </button>
+                }
               }
             </form>
             <div class="modal-footer">
               <button
                 type="button"
                 (click)="closeEditAction()"
-                class="btn btn-primary"
+                class="btn btn-outline-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
@@ -175,7 +206,7 @@
               <button
                 type="button"
                 (click)="saveEditAction(this.activeComponent()!)"
-                class="btn btn-primary"
+                class="btn btn-outline-success"
                 data-bs-dismiss="modal"
               >
                 Save
@@ -185,7 +216,7 @@
         </div>
       </div>
     </div>
-
+    <!-- Scene navbar -->
     <div class="container pt-3">
       <ul class="nav nav-tabs">
         @for (scene of this.scenes(); track $index) {
@@ -202,6 +233,7 @@
         </li>
       </ul>
     </div>
+    <!-- Timeline -->
     <div class="container pt-3">
       <h2>Timeline</h2>
       @for (action of this.activeSceneTimeline()?.actions; track $index) {
@@ -236,7 +268,7 @@
           <div class="dropdown">
             <button
               type="button"
-              class="btn btn-secondary dropdown-toggle"
+              class="btn btn-outline-primary dropdown-toggle"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
