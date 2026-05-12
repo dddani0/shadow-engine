@@ -22,9 +22,9 @@ export declare class ScenesController {
         timeline: ({
             actions: {
                 id: string;
+                componentId: string | null;
                 type: string;
                 timelineId: string;
-                componentId: string | null;
             }[];
         } & {
             id: string;
@@ -43,9 +43,9 @@ export declare class ScenesController {
         timeline: ({
             actions: {
                 id: string;
+                componentId: string | null;
                 type: string;
                 timelineId: string;
-                componentId: string | null;
             }[];
         } & {
             id: string;

@@ -23,9 +23,9 @@ export declare class ScenesService {
         timeline: ({
             actions: {
                 id: string;
+                componentId: string | null;
                 type: string;
                 timelineId: string;
-                componentId: string | null;
             }[];
         } & {
             id: string;
@@ -44,9 +44,9 @@ export declare class ScenesService {
         timeline: ({
             actions: {
                 id: string;
+                componentId: string | null;
                 type: string;
                 timelineId: string;
-                componentId: string | null;
             }[];
         } & {
             id: string;

@@ -220,18 +220,87 @@
     <div class="container pt-3">
       <ul class="nav nav-tabs">
         @for (scene of this.scenes(); track $index) {
-          <li class="nav-item" [id]="scene.id">
-            @if (scene === activeScene()) {
-              <a class="nav-link active" aria-current="page"> {{ scene.title }} </a>
+          <li class="nav-item">
+            @if (scene.id === this.activeScene()?.id) {
+              <div class="flex text-center">
+                <p class="nav-link active" aria-current="page">{{ scene.title }}</p>
+                <div class="btn-group">
+                  <button
+                    [disabled]="!hasMultipleScenes()"
+                    (click)="deleteScene(scene.id)"
+                    type="button"
+                    class="btn btn-outline-danger"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#sceneEditModal"
+                    (click)="editScene(scene)"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
             } @else {
-              <a class="nav-link"> {{ scene.title }} </a>
+              <a class="nav-link" aria-current="page" (click)="this.changeScene(scene.id)">{{
+                scene.title
+              }}</a>
             }
           </li>
         }
         <li class="nav-item">
-          <a class="nav-link" (click)="this.createScene()">+</a>
+          <div class="nav-link">
+            <button type="button" (click)="this.createScene()" class="btn btn-outline-primary">
+              Add
+            </button>
+          </div>
         </li>
       </ul>
+    </div>
+    <div
+      class="modal fade"
+      id="sceneEditModal"
+      tabindex="-1"
+      aria-labelledby="sceneEditLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Edit '{{ this.activeScene()?.title }}' scene</h2>
+          </div>
+          <div class="modal-body">
+            <label>Title: </label>
+            <br />
+            <input
+              type="text"
+              [value]="this.activeSceneTitle()"
+              (input)="this.activeSceneTitle.set(onTextInput($event))"
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              data-bs-dismiss="modal"
+              (click)="closeScene()"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-outline-primary"
+              (click)="saveScene()"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- Timeline -->
     <div class="container pt-3">
