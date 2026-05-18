@@ -84,6 +84,29 @@
                   [value]="this.activeProjectDescription()"
                 ></textarea>
               </div>
+              <div class="mb-3">
+                <label>Starting scene: </label>
+                <div class="dropdown">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    [disabled]="!(this.scenes().length > 1)"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    {{ this.startScene()?.title }}
+                  </button>
+                  <ul class="dropdown-menu">
+                    @for (scene of this.scenes(); track $index) {
+                      @if (scene.id !== this.project()?.startSceneId) {
+                        <li>
+                          <a class="dropdown-item"> {{ scene.title }} </a>
+                        </li>
+                      }
+                    }
+                  </ul>
+                </div>
+              </div>
             </form>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>

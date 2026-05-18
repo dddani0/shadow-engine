@@ -15,9 +15,9 @@ export declare class TimelineService {
     findOne(id: string): import("@prisma/client").Prisma.Prisma__TimelineClient<{
         actions: {
             id: string;
-            componentId: string | null;
             type: string;
             timelineId: string;
+            componentId: string | null;
         }[];
     } & {
         id: string;

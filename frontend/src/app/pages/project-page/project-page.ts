@@ -37,6 +37,8 @@ export class ProjectPage {
   readonly scenes = signal<Scene[]>([]);
   //The starting scene in the project (always the first scene in case of new project)
   readonly startSceneId = signal<string>('');
+  readonly startScene = signal<Scene | null>(null);
+  readonly startSceneTitle = signal<string>('');
   //GET RID OF NEXT TIME
   readonly sceneChoice = signal<Record<string, Choice[]>>({});
 
@@ -130,6 +132,7 @@ export class ProjectPage {
           next: (fetchedScenes) => {
             if (project.startSceneId == null) {
               // startSceneId doesn't exists in the db - set it and load timeline
+              // start scene marks the initial scene which loads ingame.
               this.startSceneId.set(fetchedScenes[0].id);
               //Set the active scene's id
               this.activeSceneId.set(this.startSceneId());
@@ -137,12 +140,21 @@ export class ProjectPage {
               this.activeScene.set(
                 fetchedScenes.find((scene) => scene.id === project.scenes[0].id)!,
               );
-              this.api.updateProject(projectId, {
-                startSceneId: this.startSceneId()!,
-              });
+              this.api
+                .updateProject(projectId, {
+                  startSceneId: this.startSceneId(),
+                })
+                .subscribe({
+                  next: () => this.refresh(),
+                });
             } else {
               // startSceneId already exists - set it and load timeline
               this.startSceneId.set(project.startSceneId);
+              this.startScene.set(project.scenes.find((s) => s.id === this.startSceneId())!);
+              this.startSceneTitle.set(
+                project.scenes.find((s) => s.id === this.startSceneId())!.title!,
+              );
+              console.log(this.startSceneTitle());
               this.activeSceneId.set(project.startSceneId);
               //Set the active scene
               this.activeScene.set(project.scenes.find((s) => s.id === this.activeSceneId())!);
@@ -166,6 +178,11 @@ export class ProjectPage {
     this.api.getProject(projectId).subscribe({
       next: (project) => {
         this.project.set(project);
+        this.startSceneId.set(project.startSceneId);
+        this.startScene.set(project.scenes.find((scene) => scene.id === this.startSceneId())!);
+        this.startSceneTitle.set(
+          project.scenes.find((scene) => scene.id === this.startSceneId())!.title!,
+        );
       },
       error: (err) => {
         this.error.set(this.formatError(err));
@@ -178,9 +195,7 @@ export class ProjectPage {
         this.scenes.set(sceneList);
         if (this.project()?.startSceneId) {
           // Also update activeSceneId to match startSceneId if not already set
-          if (!this.activeSceneId()) {
-            this.activeSceneId.set(this.project()?.startSceneId!);
-          }
+          this.activeSceneId.set(this.project()?.startSceneId!);
         }
       },
       error: (e) => {
@@ -200,7 +215,6 @@ export class ProjectPage {
   createScene() {
     if (!this.canCreateScene()) return;
     this.loading.set(true);
-    console.log('Scene name:', this.newSceneTitle());
     this.api
       .createScene({
         projectId: this.projectId(),
@@ -359,6 +373,15 @@ export class ProjectPage {
           next: (sl) => {
             this.activeSceneId.set(sl[0].id);
             this.activeScene.set(sl.find((s) => s.id === this.activeSceneId())!);
+            if (this.project()?.startSceneId === sceneId) {
+              this.api
+                .updateProject(this.projectId(), {
+                  startSceneId: this.activeSceneId(),
+                })
+                .subscribe({
+                  next: () => this.refresh(),
+                });
+            }
           },
         });
         this.refresh();
@@ -472,6 +495,8 @@ export class ProjectPage {
   closeScene() {
     this.activeSceneTitle.set('');
   }
+
+  setProjectStartSceneId() {}
 
   editProjectAttributes() {
     this.activeProjectTitle.set(this.project()?.title!);
