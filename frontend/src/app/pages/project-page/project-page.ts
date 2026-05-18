@@ -496,7 +496,9 @@ export class ProjectPage {
     this.activeSceneTitle.set('');
   }
 
-  setProjectStartSceneId() {}
+  setProjectStartSceneId(id: string) {
+    this.startSceneId.set(id);
+  }
 
   editProjectAttributes() {
     this.activeProjectTitle.set(this.project()?.title!);
@@ -509,6 +511,7 @@ export class ProjectPage {
         title: this.activeProjectTitle(),
         description:
           this.activeProjectDescription() === '' ? null : this.activeProjectDescription(),
+        startSceneId: this.startSceneId(),
       })
       .subscribe({
         next: (p) => {
@@ -516,6 +519,17 @@ export class ProjectPage {
           this.refresh();
         },
       });
+  }
+
+  closeProjectAttributes() {
+    this.api.getProject(this.projectId()).subscribe({
+      next: (p) => {
+        this.activeProjectTitle.set(p.title);
+        this.activeProjectDescription.set(p.description ?? '');
+        this.startSceneId.set(p.startSceneId);
+        console.log(p);
+      },
+    });
   }
 
   editAction(action: Action) {

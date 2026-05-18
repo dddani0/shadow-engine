@@ -100,7 +100,9 @@
                     @for (scene of this.scenes(); track $index) {
                       @if (scene.id !== this.project()?.startSceneId) {
                         <li>
-                          <a class="dropdown-item"> {{ scene.title }} </a>
+                          <a class="dropdown-item" (click)="this.setProjectStartSceneId(scene.id)">
+                            {{ scene.title }}
+                          </a>
                         </li>
                       }
                     }
@@ -109,7 +111,14 @@
               </div>
             </form>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                (click)="this.closeProjectAttributes()"
+              >
+                Close
+              </button>
               <button
                 type="button"
                 class="btn btn-primary"
