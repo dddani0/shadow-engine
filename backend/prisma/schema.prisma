@@ -23,7 +23,7 @@ model Scene {
   id         String      @id @default(cuid())
   projectId  String
   project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  title      String?
+  title      String
   orderIndex Int         @default(0)
   metadata   Json? // background, characters on screen, audio cues
   createdAt  DateTime    @default(now())
@@ -34,13 +34,13 @@ model Scene {
 }
 
 model Choice {
-  id           String     @id @default(cuid())
+  id           String      @id @default(cuid())
   actionId     String
-  action       Action     @relation(fields: [actionId], references: [id], onDelete: Cascade)
+  action       Action      @relation(fields: [actionId], references: [id], onDelete: Cascade)
   choiceMenu   ChoiceMenu? @relation(fields: [choiceMenuId], references: [id])
   choiceMenuId String?     @unique
   label        String
-  orderIndex   Int        @default(0)
+  orderIndex   Int         @default(0)
 }
 
 //Project timeline

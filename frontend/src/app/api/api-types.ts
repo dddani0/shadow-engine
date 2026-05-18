@@ -11,7 +11,7 @@ export interface Project {
 export interface Scene {
   id: string;
   projectId: string;
-  title: string | null;
+  title: string;
   components: Component[];
   orderIndex: number;
   metadata: unknown | null;

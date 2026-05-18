@@ -37,6 +37,8 @@ export class ProjectPage {
   readonly scenes = signal<Scene[]>([]);
   //The starting scene in the project (always the first scene in case of new project)
   readonly startSceneId = signal<string>('');
+  readonly startScene = signal<Scene | null>(null);
+  readonly startSceneTitle = signal<string>('');
   //GET RID OF NEXT TIME
   readonly sceneChoice = signal<Record<string, Choice[]>>({});
 
@@ -65,6 +67,8 @@ export class ProjectPage {
   // New scene form
   readonly newSceneTitle = signal('');
   readonly newSceneOrderIndex = signal(0);
+  //
+  readonly activeSceneTitle = signal<string>('');
 
   //new component form
   readonly newComponentTitle = signal('');
@@ -84,16 +88,20 @@ export class ProjectPage {
       !this.loading(),
   );
 
-  readonly actionSwapCooldown : Number = 3000;
+  readonly actionSwapCooldown: Number = 3000;
   readonly actionSwapDisabled = false;
 
   constructor() {
     //Set id from route's current version.
     const id = this.route.snapshot.paramMap.get('projectId') ?? '';
     this.projectId.set(id);
+    this.UpdateSceneNamingConvention();
     this.setStartSceneId();
     this.refresh();
-    this.newSceneTitle.set(`$New scene(${this.scenes.length})`);
+  }
+
+  hasMultipleScenes(): boolean {
+    return this.scenes().length > 1;
   }
 
   onTextInput(event: Event): string {
@@ -120,32 +128,45 @@ export class ProjectPage {
     const projectId = this.projectId();
     this.api.getProject(projectId).subscribe({
       next: (project) => {
-        if (!project.startSceneId) {
-          //Set the starting scene id attribute
-          this.startSceneId.set(project.scenes[0].id);
-          //Set the active scene's id
-          this.activeSceneId.set(project.scenes[0].id);
-          //Set the active scene
-          this.activeScene.set(project.scenes.find((s) => s.id === this.activeSceneId())!);
-          //Load the timeline for the active scene
-          this.loadActiveSceneTimeline();
-          //Update the project's data in the database according to the change
-          this.api.updateProject(projectId, {
-            startSceneId: this.startSceneId()!,
-          });
-        } else {
-          // startSceneId already exists - set it and load timeline
-          this.startSceneId.set(project.startSceneId);
-          this.activeSceneId.set(project.startSceneId);
-          //Set the active scene
-          this.activeScene.set(project.scenes.find((s) => s.id === this.activeSceneId())!);
-        }
+        this.api.listScenes(projectId).subscribe({
+          next: (fetchedScenes) => {
+            if (project.startSceneId == null) {
+              // startSceneId doesn't exists in the db - set it and load timeline
+              // start scene marks the initial scene which loads ingame.
+              this.startSceneId.set(fetchedScenes[0].id);
+              //Set the active scene's id
+              this.activeSceneId.set(this.startSceneId());
+              //Set the active scene
+              this.activeScene.set(
+                fetchedScenes.find((scene) => scene.id === project.scenes[0].id)!,
+              );
+              this.api
+                .updateProject(projectId, {
+                  startSceneId: this.startSceneId(),
+                })
+                .subscribe({
+                  next: () => this.refresh(),
+                });
+            } else {
+              // startSceneId already exists - set it and load timeline
+              this.startSceneId.set(project.startSceneId);
+              this.startScene.set(project.scenes.find((s) => s.id === this.startSceneId())!);
+              this.startSceneTitle.set(
+                project.scenes.find((s) => s.id === this.startSceneId())!.title!,
+              );
+              console.log(this.startSceneTitle());
+              this.activeSceneId.set(project.startSceneId);
+              //Set the active scene
+              this.activeScene.set(project.scenes.find((s) => s.id === this.activeSceneId())!);
+            }
+          },
+        });
       },
     });
   }
 
-  SceneActionSetup() {
-    this.newSceneTitle.set(`$New scene(${this.scenes.length})`);
+  UpdateSceneNamingConvention() {
+    this.newSceneTitle.set(`New scene${this.scenes().length}`);
     this.newSceneOrderIndex.set(this.newSceneOrderIndex() + 1);
   }
 
@@ -157,6 +178,11 @@ export class ProjectPage {
     this.api.getProject(projectId).subscribe({
       next: (project) => {
         this.project.set(project);
+        this.startSceneId.set(project.startSceneId);
+        this.startScene.set(project.scenes.find((scene) => scene.id === this.startSceneId())!);
+        this.startSceneTitle.set(
+          project.scenes.find((scene) => scene.id === this.startSceneId())!.title!,
+        );
       },
       error: (err) => {
         this.error.set(this.formatError(err));
@@ -169,9 +195,7 @@ export class ProjectPage {
         this.scenes.set(sceneList);
         if (this.project()?.startSceneId) {
           // Also update activeSceneId to match startSceneId if not already set
-          if (!this.activeSceneId()) {
-            this.activeSceneId.set(this.project()?.startSceneId!);
-          }
+          this.activeSceneId.set(this.project()?.startSceneId!);
         }
       },
       error: (e) => {
@@ -199,8 +223,9 @@ export class ProjectPage {
       })
       .subscribe({
         next: () => {
-          this.SceneActionSetup();
+          this.UpdateSceneNamingConvention();
           this.refresh();
+          console.log(this.newSceneTitle());
         },
         error: (e) => {
           this.error.set(this.formatError(e));
@@ -341,10 +366,26 @@ export class ProjectPage {
   }
 
   deleteScene(sceneId: string) {
-    if (!confirm('Delete this scene?')) return;
     this.loading.set(true);
     this.api.deleteScene(sceneId).subscribe({
-      next: () => this.refresh(),
+      next: () => {
+        this.api.listScenes(this.projectId()).subscribe({
+          next: (sl) => {
+            this.activeSceneId.set(sl[0].id);
+            this.activeScene.set(sl.find((s) => s.id === this.activeSceneId())!);
+            if (this.project()?.startSceneId === sceneId) {
+              this.api
+                .updateProject(this.projectId(), {
+                  startSceneId: this.activeSceneId(),
+                })
+                .subscribe({
+                  next: () => this.refresh(),
+                });
+            }
+          },
+        });
+        this.refresh();
+      },
       error: (e) => {
         this.error.set(this.formatError(e));
         this.loading.set(false);
@@ -423,11 +464,40 @@ export class ProjectPage {
     this.refresh();
   }
 
-  changeScene(target: Event) {
-    const targetId = (target.currentTarget as HTMLElement).id;
-    this.activeSceneId.set(targetId);
-    this.activeScene.set(this.scenes().find((s) => s.id === targetId) ?? null);
+  changeScene(id: string) {
+    if (this.scenes().find((scene) => scene.id === id) === undefined) {
+      console.log('Scene not found!');
+      return;
+    }
+    const sceneIdx = this.scenes().find((scene) => scene.id === id)?.id;
+    this.activeSceneId.set(sceneIdx!);
+    this.activeScene.set(this.scenes().find((s) => s.id === this.activeSceneId()) ?? null);
     this.loadActiveSceneTimeline();
+  }
+
+  editScene(scene: Scene) {
+    this.activeSceneTitle.set(scene.title!);
+  }
+
+  saveScene() {
+    this.api
+      .updateScene(this.activeSceneId(), {
+        title: this.activeSceneTitle(),
+      })
+      .subscribe({
+        next: (scene) => {
+          console.log(scene.title);
+          this.refresh();
+        },
+      });
+  }
+
+  closeScene() {
+    this.activeSceneTitle.set('');
+  }
+
+  setProjectStartSceneId(id: string) {
+    this.startSceneId.set(id);
   }
 
   editProjectAttributes() {
@@ -441,6 +511,7 @@ export class ProjectPage {
         title: this.activeProjectTitle(),
         description:
           this.activeProjectDescription() === '' ? null : this.activeProjectDescription(),
+        startSceneId: this.startSceneId(),
       })
       .subscribe({
         next: (p) => {
@@ -448,6 +519,17 @@ export class ProjectPage {
           this.refresh();
         },
       });
+  }
+
+  closeProjectAttributes() {
+    this.api.getProject(this.projectId()).subscribe({
+      next: (p) => {
+        this.activeProjectTitle.set(p.title);
+        this.activeProjectDescription.set(p.description ?? '');
+        this.startSceneId.set(p.startSceneId);
+        console.log(p);
+      },
+    });
   }
 
   editAction(action: Action) {

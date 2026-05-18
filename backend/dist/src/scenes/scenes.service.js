@@ -21,7 +21,7 @@ let ScenesService = class ScenesService {
         return this.prisma.scene.create({
             data: {
                 projectId: dto.projectId,
-                title: dto.title ?? null,
+                title: dto.title,
                 orderIndex: dto.orderIndex ?? 0,
                 metadata: (dto.metadata ??
                     undefined),
