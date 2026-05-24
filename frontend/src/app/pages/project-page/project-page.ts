@@ -13,10 +13,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiClient } from '../../api/api-client';
 import { errorContext } from 'rxjs/internal/util/errorContext';
 
-/*
-
- */
-
 @AngularComponent({
   selector: 'app-project-page',
   imports: [RouterLink],
@@ -60,6 +56,8 @@ export class ProjectPage {
   readonly activeChoiceMenuTitle = signal<string>('');
   readonly activeChoiceMenuDescription = signal<string>('');
   readonly activeChoiceMenuChoices = signal<Choice[]>([]);
+  readonly activeLoadSceneId = signal<string>('');
+  readonly activeLoadScene = signal<Scene | null>(null);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -261,6 +259,7 @@ export class ProjectPage {
                         type: type,
                         timelineId: this.activeScene()?.timeline.id!,
                         componentId: component.id,
+                        variables: [],
                       })
                       .subscribe({
                         next: () => {
@@ -305,6 +304,7 @@ export class ProjectPage {
                         type: type,
                         timelineId: this.activeScene()?.timeline.id!,
                         componentId: component.id,
+                        variables: [],
                       })
                       .subscribe({
                         next: () => {
@@ -337,6 +337,7 @@ export class ProjectPage {
                       type: type,
                       timelineId: this.activeScene()?.timeline.id!,
                       componentId: component.id,
+                      variables: [],
                     })
                     .subscribe({
                       next: () => {
@@ -351,6 +352,18 @@ export class ProjectPage {
               });
           },
         });
+        break;
+      case 'LoadScene':
+        this.api
+          .createAction({
+            type: type,
+            timelineId: this.activeScene()?.timeline.id!,
+            variables: [],
+            loadSceneId: this.startSceneId(),
+          })
+          .subscribe({
+            next: () => this.refreshActiveTimeline(),
+          });
         break;
       default:
         throw errorContext(() => console.log('No such event:' + type));
@@ -534,25 +547,33 @@ export class ProjectPage {
 
   editAction(action: Action) {
     this.activeAction.set(action);
-    this.api.getComponent(action?.componentId!).subscribe({
-      next: (component) => {
-        this.activeComponent.set(component);
-        if (component.sprite != null) {
-          console.log('Component is a sprite');
-          this.activeSpritePath.set(component.sprite?.path);
-        } else if (component.textBox != null) {
-          console.log('Component is a textbox');
-          this.activeTextboxTitle.set(component.textBox?.title!);
-          this.activeTextboxContent.set(component.textBox.content);
-          this.activeTextboxCps.set(component.textBox.characterPerSecond);
-        } else if (component.choiceMenu != null) {
-          console.log('Component is a choicemenu');
-          this.activeChoiceMenuTitle.set(component.choiceMenu?.title!);
-          this.activeChoiceMenuDescription.set(component.choiceMenu?.description!);
-          this.activeChoiceMenuChoices.set(component.choiceMenu?.choices!);
-        }
-      },
-    });
+    if (action.componentId) {
+      this.api.getComponent(action?.componentId!).subscribe({
+        next: (component) => {
+          this.activeComponent.set(component);
+          if (component.sprite != null) {
+            console.log('Component is a sprite');
+            this.activeSpritePath.set(component.sprite?.path);
+          } else if (component.textBox != null) {
+            console.log('Component is a textbox');
+            this.activeTextboxTitle.set(component.textBox?.title!);
+            this.activeTextboxContent.set(component.textBox.content);
+            this.activeTextboxCps.set(component.textBox.characterPerSecond);
+          } else if (component.choiceMenu != null) {
+            console.log('Component is a choicemenu');
+            this.activeChoiceMenuTitle.set(component.choiceMenu?.title!);
+            this.activeChoiceMenuDescription.set(component.choiceMenu?.description!);
+            this.activeChoiceMenuChoices.set(component.choiceMenu?.choices!);
+          }
+        },
+      });
+    } else {
+      if (action.loadSceneId !== undefined) {
+        this.activeLoadSceneId.set(action.loadSceneId);
+        this.activeLoadScene.set(this.scenes().find((s) => s.id === this.activeLoadSceneId())!);
+        console.log(this.activeLoadSceneId());
+      }
+    }
   }
 
   closeEditAction() {
@@ -568,37 +589,52 @@ export class ProjectPage {
     this.activeChoiceMenuTitle.set('');
     this.activeChoiceMenuDescription.set('');
     this.activeChoiceMenuChoices.set([]);
+    //
+    this.activeLoadSceneId.set('');
   }
 
   saveEditAction(component: Component) {
-    if (component.sprite != null) {
+    if (component === null) {
+      this.api.getAction(this.activeAction()?.id!).subscribe({
+        next: (e) => console.log(e.loadSceneId),
+      });
       this.api
-        .updateSprite(this.activeComponent()?.sprite?.id!, {
-          path: this.activeSpritePath(),
+        .updateAction(this.activeAction()?.id!, {
+          loadSceneId: this.activeLoadSceneId(),
         })
         .subscribe({
-          next: (s) => console.log(s),
+          next: (l) => console.log(l),
         });
-    } else if (component.textBox != null) {
-      this.api
-        .updateTextbox(this.activeComponent()?.textBox?.id!, {
-          title: this.activeTextboxTitle(),
-          content: this.activeTextboxContent(),
-          charPerSecond: this.activeTextboxCps(),
-        })
-        .subscribe({
-          next: (t) => console.log(t),
-        });
-    } else if (component.choiceMenu != null) {
-      this.api
-        .updateChoiceMenu(component.choiceMenu.id, {
-          title: this.activeChoiceMenuTitle(),
-          description: this.activeChoiceMenuDescription(),
-          choices: this.activeChoiceMenuChoices(),
-        })
-        .subscribe({
-          next: (c) => console.log(c),
-        });
+    } else {
+      if (component.sprite != null) {
+        this.api
+          .updateSprite(this.activeComponent()?.sprite?.id!, {
+            path: this.activeSpritePath(),
+          })
+          .subscribe({
+            next: (s) => console.log(s),
+          });
+      } else if (component.textBox != null) {
+        this.api
+          .updateTextbox(this.activeComponent()?.textBox?.id!, {
+            title: this.activeTextboxTitle(),
+            content: this.activeTextboxContent(),
+            charPerSecond: this.activeTextboxCps(),
+          })
+          .subscribe({
+            next: (t) => console.log(t),
+          });
+      } else if (component.choiceMenu != null) {
+        this.api
+          .updateChoiceMenu(component.choiceMenu.id, {
+            title: this.activeChoiceMenuTitle(),
+            description: this.activeChoiceMenuDescription(),
+            choices: this.activeChoiceMenuChoices(),
+          })
+          .subscribe({
+            next: (c) => console.log(c),
+          });
+      }
     }
   }
 

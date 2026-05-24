@@ -18,6 +18,7 @@ export declare class TimelineService {
             type: string;
             timelineId: string;
             componentId: string | null;
+            loadSceneId: string | null;
         }[];
     } & {
         id: string;

@@ -92,11 +92,13 @@ model Textbox {
 
 //Action of the timeline
 model Action {
-  id          String   @id @default(cuid())
+  id          String     @id @default(cuid())
   type        String
-  timeline    Timeline @relation(fields: [timelineId], references: [id], onDelete: Cascade)
+  timeline    Timeline   @relation(fields: [timelineId], references: [id], onDelete: Cascade)
   timelineId  String
   componentId String?
+  loadSceneId String?
+  variables   Variable[]
   choices     Choice[]
 }
 
@@ -109,6 +111,7 @@ model Variable {
   value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  actions   Action[]
 
   @@unique([projectId, name]) //The combination has to be unique
 }

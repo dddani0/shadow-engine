@@ -73,7 +73,7 @@ export interface Component {
   title: String;
   sprite?: Sprite;
   textBox?: Textbox;
-  choiceMenu?: ChoiceMenu
+  choiceMenu?: ChoiceMenu;
 }
 
 export interface Action {
@@ -81,4 +81,14 @@ export interface Action {
   type: string;
   timelineId: string;
   componentId?: string;
+  variables: Variable[];
+  loadSceneId?: string;
+}
+
+export interface Variable {
+  id: string;
+  projectId: string;
+  project: Project;
+  name: string;
+  value: string;
 }

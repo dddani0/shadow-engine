@@ -12,7 +12,7 @@ export declare class ScenesController {
     } & {
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
@@ -25,6 +25,7 @@ export declare class ScenesController {
                 type: string;
                 timelineId: string;
                 componentId: string | null;
+                loadSceneId: string | null;
             }[];
         } & {
             id: string;
@@ -33,7 +34,7 @@ export declare class ScenesController {
     } & {
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
@@ -46,6 +47,7 @@ export declare class ScenesController {
                 type: string;
                 timelineId: string;
                 componentId: string | null;
+                loadSceneId: string | null;
             }[];
         } & {
             id: string;
@@ -54,7 +56,7 @@ export declare class ScenesController {
     } & {
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
@@ -63,7 +65,7 @@ export declare class ScenesController {
     update(id: string, dto: UpdateSceneDto): import("@prisma/client").Prisma.Prisma__SceneClient<{
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;
@@ -72,7 +74,7 @@ export declare class ScenesController {
     remove(id: string): import("@prisma/client").Prisma.Prisma__SceneClient<{
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: import("@prisma/client/runtime/client").JsonValue | null;
         createdAt: Date;

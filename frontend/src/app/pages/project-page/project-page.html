@@ -224,6 +224,31 @@
                     Add choice
                   </button>
                 }
+                @case ('LoadScene') {
+                  <label for="spritePath">Load scene</label>
+                  <br />
+                  <div class="dropdown">
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {{ this.activeLoadScene()?.title }}
+                    </button>
+                    <div class="dropdown-menu">
+                      @for (s of this.scenes(); track $index) {
+                        @if (s.id !== this.activeLoadSceneId()) {
+                          <a
+                            class="dropdown-item"
+                            (click)="this.activeLoadSceneId.set(s.id); this.activeLoadScene.set(this.scenes().find((s) => s.id === this.activeLoadSceneId())!)"
+                            >{{ s.title }}
+                          </a>
+                        }
+                      }
+                    </div>
+                  </div>
+                }
               }
             </form>
             <div class="modal-footer">
@@ -433,6 +458,11 @@
               <li>
                 <a class="dropdown-item" (click)="this.createAction('DisableChoiceMenu')"
                   >Disable choice menu</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('LoadScene')"
+                  >Load scene action</a
                 >
               </li>
             </ul>
