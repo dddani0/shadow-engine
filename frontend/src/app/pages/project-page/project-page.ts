@@ -569,11 +569,15 @@ export class ProjectPage {
       });
     } else {
       if (action.loadSceneId !== undefined) {
-        this.activeLoadSceneId.set(action.loadSceneId);
-        this.activeLoadScene.set(this.scenes().find((s) => s.id === this.activeLoadSceneId())!);
-        console.log(this.activeLoadSceneId());
+        this.setLoadScene(action.loadSceneId);
       }
     }
+  }
+
+  setLoadScene(id: string) {
+    this.activeLoadSceneId.set(id);
+    this.activeLoadScene.set(this.scenes().find((s) => s.id === this.activeLoadSceneId())!);
+    console.log(this.activeLoadSceneId());
   }
 
   closeEditAction() {
@@ -591,6 +595,7 @@ export class ProjectPage {
     this.activeChoiceMenuChoices.set([]);
     //
     this.activeLoadSceneId.set('');
+    this.activeLoadScene.set(null);
   }
 
   saveEditAction(component: Component) {
@@ -599,11 +604,14 @@ export class ProjectPage {
         next: (e) => console.log(e.loadSceneId),
       });
       this.api
-        .updateAction(this.activeAction()?.id!, {
+        .updateAction(this.activeAction()!.id, {
           loadSceneId: this.activeLoadSceneId(),
         })
         .subscribe({
-          next: (l) => console.log(l),
+          next: (l) => {
+            console.log(l);
+            this.refresh();
+          },
         });
     } else {
       if (component.sprite != null) {

@@ -239,9 +239,7 @@
                     <div class="dropdown-menu">
                       @for (s of this.scenes(); track $index) {
                         @if (s.id !== this.activeLoadSceneId()) {
-                          <a
-                            class="dropdown-item"
-                            (click)="this.activeLoadSceneId.set(s.id); this.activeLoadScene.set(this.scenes().find((s) => s.id === this.activeLoadSceneId())!)"
+                          <a class="dropdown-item" (click)="this.setLoadScene(s.id)"
                             >{{ s.title }}
                           </a>
                         }
