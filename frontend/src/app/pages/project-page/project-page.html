@@ -172,12 +172,25 @@
                   <br />
                   <label for="cps">Character per second</label>
                   <br />
-                  <input id="cps" type="text" [value]="this.activeTextboxCps()" />
+                  <input
+                    id="cps"
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    (input)="this.activeTextboxCps.set(onNumberInput($event))"
+                    [value]="this.activeTextboxCps()"
+                  />
                   <br />
                   <label>Content</label>
                   <br />
                   @for (item of this.activeTextboxContent(); track $index) {
-                    <textarea [name]="$index" [value]="item"></textarea>
+                    <textarea
+                      [name]="$index"
+                      (input)="updateContentItem($index, $event)"
+                      [value]="item"
+                    >
+                    </textarea>
+                    <button class="btn btn-danger" type="button">Delete</button>
                     <br />
                   }
                   <br />

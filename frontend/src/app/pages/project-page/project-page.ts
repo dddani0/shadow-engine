@@ -102,6 +102,16 @@ export class ProjectPage {
     return this.scenes().length > 1;
   }
 
+  updateContentItem(index: number, event: Event) {
+    const newValue = (event.target as HTMLTextAreaElement).value;
+
+    this.activeTextboxContent.update((items) => {
+      const updatedItems = [...items];
+      updatedItems[index] = newValue;
+      return updatedItems;
+    });
+  }
+
   onTextInput(event: Event): string {
     return (
       (event.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? ''
@@ -109,9 +119,13 @@ export class ProjectPage {
   }
 
   onNumberInput(event: Event): number {
-    const raw = (event.target as HTMLInputElement | null)?.value ?? '0';
-    const n = Number(raw);
-    return Number.isFinite(n) ? n : 0;
+    const rawValue = (
+      (event.target as HTMLInputElement | HTMLTextAreaElement | null)?.value ?? ''
+    ).toString();
+
+    const cleanValue = rawValue.replace(/[^0-9]/g, '');
+
+    return Number(cleanValue);
   }
 
   onSelect(event: Event): string {
@@ -556,9 +570,9 @@ export class ProjectPage {
             this.activeSpritePath.set(component.sprite?.path);
           } else if (component.textBox != null) {
             console.log('Component is a textbox');
-            this.activeTextboxTitle.set(component.textBox?.title!);
+            this.activeTextboxTitle.set(component.textBox.title!);
             this.activeTextboxContent.set(component.textBox.content);
-            this.activeTextboxCps.set(component.textBox.characterPerSecond);
+            this.activeTextboxCps.set(component.textBox.charPerSecond);
           } else if (component.choiceMenu != null) {
             console.log('Component is a choicemenu');
             this.activeChoiceMenuTitle.set(component.choiceMenu?.title!);

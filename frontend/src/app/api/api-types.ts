@@ -64,7 +64,7 @@ export interface Textbox {
   id: string;
   title?: string;
   content: string[];
-  characterPerSecond: number;
+  charPerSecond: number;
 }
 
 export interface Component {
