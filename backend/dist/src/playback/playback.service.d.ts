@@ -5,7 +5,7 @@ export declare class PlaybackService {
     getScene(projectId: string, sceneId?: string): Promise<{
         scene: {
             id: string;
-            title: string | null;
+            title: string;
             metadata: import("@prisma/client/runtime/client").JsonValue;
             orderIndex: number;
         };

@@ -29,7 +29,7 @@ export declare class ProjectsController {
         } & {
             id: string;
             projectId: string;
-            title: string | null;
+            title: string;
             orderIndex: number;
             metadata: import("@prisma/client/runtime/client").JsonValue | null;
             createdAt: Date;

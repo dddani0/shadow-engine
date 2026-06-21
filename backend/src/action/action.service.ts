@@ -13,6 +13,12 @@ export class ActionService {
         timelineId: dto.timelineId,
         type: dto.type,
         componentId: dto.componentId,
+        ...(dto.loadSceneId ? { loadSceneId: dto.loadSceneId } : {}),
+        variables: dto.variables
+          ? {
+              connect: dto.variables,
+            }
+          : undefined,
       },
     });
   }
@@ -41,6 +47,12 @@ export class ActionService {
         timelineId: dto.timelineId,
         type: dto.type,
         componentId: dto.componentId,
+        variables: dto.variables
+          ? {
+              connect: dto.variables,
+            }
+          : undefined,
+        loadSceneId: dto.loadSceneId ?? null,
       },
     });
   }

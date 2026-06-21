@@ -41,6 +41,8 @@ export class ApiClient {
     type: string;
     timelineId: string;
     componentId?: string;
+    variables: [];
+    loadSceneId?: string;
   }): Observable<Action> {
     return this.http.post<Action>(`${this.baseUrl}/actions`, body);
   }
@@ -204,7 +206,10 @@ export class ApiClient {
     return this.http.get<Action>(`${this.baseUrl}/actions/${id}`);
   }
 
-  updateAction(id: string, body: { type?: string; spriteId?: string }): Observable<Action> {
+  updateAction(
+    id: string,
+    body: { type?: string; spriteId?: string; loadSceneId?: string },
+  ): Observable<Action> {
     return this.http.patch<Action>(`${this.baseUrl}/actions/${id}`, body);
   }
 

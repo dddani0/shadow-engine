@@ -13,7 +13,7 @@ export declare class ComponentService {
         scene: {
             id: string;
             projectId: string;
-            title: string | null;
+            title: string;
             orderIndex: number;
             metadata: import("@prisma/client/runtime/client").JsonValue | null;
             createdAt: Date;
@@ -46,7 +46,7 @@ export declare class ComponentService {
         scene: {
             id: string;
             projectId: string;
-            title: string | null;
+            title: string;
             orderIndex: number;
             metadata: import("@prisma/client/runtime/client").JsonValue | null;
             createdAt: Date;
@@ -79,7 +79,7 @@ export declare class ComponentService {
         scene: {
             id: string;
             projectId: string;
-            title: string | null;
+            title: string;
             orderIndex: number;
             metadata: import("@prisma/client/runtime/client").JsonValue | null;
             createdAt: Date;
@@ -117,7 +117,7 @@ export declare class ComponentService {
         scene: {
             id: string;
             projectId: string;
-            title: string | null;
+            title: string;
             orderIndex: number;
             metadata: import("@prisma/client/runtime/client").JsonValue | null;
             createdAt: Date;
