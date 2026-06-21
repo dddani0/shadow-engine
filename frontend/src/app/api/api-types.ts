@@ -40,13 +40,7 @@ export interface ChoiceMenu {
 }
 
 export interface PlaybackResponse {
-  scene: {
-    id: string;
-    title: string | null;
-    content: string;
-    metadata: unknown | null;
-    orderIndex: number;
-  } | null;
+  scene: Scene | null;
   choices: Choice[];
 }
 
@@ -73,7 +67,7 @@ export interface Component {
   title: String;
   sprite?: Sprite;
   textBox?: Textbox;
-  choiceMenu?: ChoiceMenu
+  choiceMenu?: ChoiceMenu;
 }
 
 export interface Action {

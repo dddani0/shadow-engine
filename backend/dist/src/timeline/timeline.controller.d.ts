@@ -18,6 +18,7 @@ export declare class TimelineController {
             type: string;
             timelineId: string;
             componentId: string | null;
+            loadSceneId: string | null;
         }[];
     } & {
         id: string;

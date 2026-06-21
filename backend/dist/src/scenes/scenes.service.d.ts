@@ -13,7 +13,7 @@ export declare class ScenesService {
     } & {
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
@@ -26,6 +26,7 @@ export declare class ScenesService {
                 type: string;
                 timelineId: string;
                 componentId: string | null;
+                loadSceneId: string | null;
             }[];
         } & {
             id: string;
@@ -34,7 +35,7 @@ export declare class ScenesService {
     } & {
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
@@ -47,6 +48,7 @@ export declare class ScenesService {
                 type: string;
                 timelineId: string;
                 componentId: string | null;
+                loadSceneId: string | null;
             }[];
         } & {
             id: string;
@@ -55,7 +57,7 @@ export declare class ScenesService {
     } & {
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
@@ -64,7 +66,7 @@ export declare class ScenesService {
     update(id: string, dto: UpdateSceneDto): Prisma.Prisma__SceneClient<{
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
@@ -73,7 +75,7 @@ export declare class ScenesService {
     remove(id: string): Prisma.Prisma__SceneClient<{
         id: string;
         projectId: string;
-        title: string | null;
+        title: string;
         orderIndex: number;
         metadata: Prisma.JsonValue | null;
         createdAt: Date;
