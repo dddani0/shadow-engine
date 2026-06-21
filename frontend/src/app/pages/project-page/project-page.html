@@ -226,13 +226,13 @@
                   <br />
                   <label>Choices</label>
                   <br />
-                  @for (item of this.activeComponent()?.choiceMenu?.choices; track $index) {
+                  @for (item of this.activeComponent()?.choiceMenu!.choices; track $index) {
                     {{ item }}
                   }
                   <button
                     type="button"
                     class="btn btn-success"
-                    (click)="this.activeChoiceMenuChoices.set([])"
+                    (click)="this.activeChoiceMenuChoices.set(this.activeChoiceMenuChoices().concat([]))"
                   >
                     Add choice
                   </button>

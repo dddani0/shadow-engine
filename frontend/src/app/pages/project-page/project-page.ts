@@ -577,7 +577,7 @@ export class ProjectPage {
             console.log('Component is a choicemenu');
             this.activeChoiceMenuTitle.set(component.choiceMenu?.title!);
             this.activeChoiceMenuDescription.set(component.choiceMenu?.description!);
-            this.activeChoiceMenuChoices.set(component.choiceMenu?.choices!);
+            this.activeChoiceMenuChoices.set(component.choiceMenu.choices!);
           }
         },
       });
