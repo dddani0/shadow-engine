@@ -7,6 +7,7 @@ import {
   PlaybackResponse,
   Project,
   Scene,
+  Sprite,
   Timeline,
 } from '../../api/api-types';
 
@@ -35,10 +36,13 @@ export class PlayPage {
   readonly actionIndex = signal<number>(-1);
   readonly currentAction = signal<Action | null>(null);
   readonly currentComponent = signal<Comp | null>(null);
+  readonly enabledSprites = signal<Sprite[]>([]);
 
   readonly payload = signal<PlaybackResponse | null>(null);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+
+  maximumNumberOfSprites: number = 3;
 
   constructor() {
     const projectId = this.route.snapshot.paramMap.get('projectId') ?? '';
@@ -83,7 +87,7 @@ export class PlayPage {
         this.currentScene.set(s);
         this.currentTimeline.set(s.timeline);
         //
-        this.actionIndex.set(0);
+        this.actionIndex.set(-1);
         this.stepTimeline();
       },
       error: (err) => this.error.set(this.formatError(err)),
@@ -97,10 +101,15 @@ export class PlayPage {
     this.actionIndex.set(this.actionIndex() + 1);
     this.currentAction.set(this.currentTimeline()?.actions[this.actionIndex()]!);
     if (this.currentAction()?.componentId !== null) {
-      console.log(this.currentAction()?.type);
+      console.log(this.currentAction());
       this.api.getComponent(this.currentAction()?.componentId!).subscribe({
         next: (c) => {
           this.currentComponent.set(c);
+          if (this.currentComponent()?.sprite != null) {
+            // this.enabledSprites.set(
+            //   this.enabledSprites().concat([this.currentComponent()!.sprite]),
+            // );
+          }
         },
       });
     }

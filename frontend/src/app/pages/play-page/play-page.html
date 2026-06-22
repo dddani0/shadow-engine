@@ -16,13 +16,22 @@
   <div style="height: 500px">
     <div class="container-sm h-100 d-inline-block border border-5 border-danger bg-secondary">
       @if (this.currentAction() !== null) {
-        {{ this.currentAction()?.type }}
         @switch (this.currentAction()?.type) {
           @case ('EnableTextbox') {
-            THIS IS A TEXTBOX
-            <p>{{ this.currentComponent()?.textBox?.title }}</p>
+            <div class="d-flex flex-column justify-content-end">
+              <div class="container border bottom-100">
+                <h2>{{ this.currentComponent()?.textBox?.title }}</h2>
+                @if (this.currentComponent()?.textBox?.content != null) {
+                  @if (this.currentComponent()?.textBox!.content!.length > 0) {
+                    <p>{{ this.currentComponent()?.textBox!.content[0] }}</p>
+                  }
+                }
+              </div>
+            </div>
           }
-          @default {}
+          @case ('EnableChoiceMenu') {
+            EnableChoiceMenu
+          }
         }
       }
     </div>
