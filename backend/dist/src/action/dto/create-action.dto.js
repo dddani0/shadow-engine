@@ -5,6 +5,8 @@ class CreateActionDto {
     timelineId;
     type;
     componentId;
+    variables;
+    loadSceneId;
 }
 exports.CreateActionDto = CreateActionDto;
 //# sourceMappingURL=create-action.dto.js.map

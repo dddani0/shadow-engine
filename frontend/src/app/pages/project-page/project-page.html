@@ -172,12 +172,25 @@
                   <br />
                   <label for="cps">Character per second</label>
                   <br />
-                  <input id="cps" type="text" [value]="this.activeTextboxCps()" />
+                  <input
+                    id="cps"
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    (input)="this.activeTextboxCps.set(onNumberInput($event))"
+                    [value]="this.activeTextboxCps()"
+                  />
                   <br />
                   <label>Content</label>
                   <br />
                   @for (item of this.activeTextboxContent(); track $index) {
-                    <textarea [name]="$index" [value]="item"></textarea>
+                    <textarea
+                      [name]="$index"
+                      (input)="updateContentItem($index, $event)"
+                      [value]="item"
+                    >
+                    </textarea>
+                    <button class="btn btn-danger" type="button">Delete</button>
                     <br />
                   }
                   <br />
@@ -213,16 +226,39 @@
                   <br />
                   <label>Choices</label>
                   <br />
-                  @for (item of this.activeComponent()?.choiceMenu?.choices; track $index) {
+                  @for (item of this.activeComponent()?.choiceMenu!.choices; track $index) {
                     {{ item }}
                   }
                   <button
                     type="button"
                     class="btn btn-success"
-                    (click)="this.activeChoiceMenuChoices.set([])"
+                    (click)="this.activeChoiceMenuChoices.set(this.activeChoiceMenuChoices().concat([]))"
                   >
                     Add choice
                   </button>
+                }
+                @case ('LoadScene') {
+                  <label for="spritePath">Load scene</label>
+                  <br />
+                  <div class="dropdown">
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {{ this.activeLoadScene()?.title }}
+                    </button>
+                    <div class="dropdown-menu">
+                      @for (s of this.scenes(); track $index) {
+                        @if (s.id !== this.activeLoadSceneId()) {
+                          <a class="dropdown-item" (click)="this.setLoadScene(s.id)"
+                            >{{ s.title }}
+                          </a>
+                        }
+                      }
+                    </div>
+                  </div>
                 }
               }
             </form>
@@ -433,6 +469,11 @@
               <li>
                 <a class="dropdown-item" (click)="this.createAction('DisableChoiceMenu')"
                   >Disable choice menu</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="this.createAction('LoadScene')"
+                  >Load scene action</a
                 >
               </li>
             </ul>

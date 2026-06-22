@@ -58,7 +58,7 @@ export interface Textbox {
   id: string;
   title?: string;
   content: string[];
-  characterPerSecond: number;
+  charPerSecond: number;
 }
 
 export interface Component {
@@ -75,4 +75,14 @@ export interface Action {
   type: string;
   timelineId: string;
   componentId?: string;
+  variables: Variable[];
+  loadSceneId?: string;
+}
+
+export interface Variable {
+  id: string;
+  projectId: string;
+  project: Project;
+  name: string;
+  value: string;
 }
