@@ -1,5 +1,6 @@
 <div class="container">
-  <div class="btr-group">
+  <h1>{{ this.projectName() }}</h1>
+  <div class="btn-group">
     <button
       [routerLink]="['/projects', projectId()]"
       type="button"
@@ -11,5 +12,19 @@
       Reset
     </button>
   </div>
-  {{ this.payload()?.scene?.timeline }}
+  <br />
+  <div style="height: 500px">
+    <div class="container-sm h-100 d-inline-block border border-5 border-danger bg-secondary">
+      @if (this.currentAction() !== null) {
+        {{ this.currentAction()?.type }}
+        @switch (this.currentAction()?.type) {
+          @case ('EnableTextbox') {
+            THIS IS A TEXTBOX
+            <p>{{ this.currentComponent()?.textBox?.title }}</p>
+          }
+          @default {}
+        }
+      }
+    </div>
+  </div>
 </div>
