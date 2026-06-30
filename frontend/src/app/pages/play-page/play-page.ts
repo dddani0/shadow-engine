@@ -8,8 +8,10 @@ import {
   Project,
   Scene,
   Sprite,
+  Textbox,
   Timeline,
 } from '../../api/api-types';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-play-page',
@@ -37,6 +39,15 @@ export class PlayPage {
   readonly currentAction = signal<Action | null>(null);
   readonly currentComponent = signal<Comp | null>(null);
   readonly enabledSprites = signal<Sprite[]>([]);
+  readonly textBox = signal<Textbox | null>(null);
+  //
+  readonly textBoxOutputStarted = signal<boolean>(false);
+  readonly textBoxOutput = signal<string>('');
+  readonly textBoxCPS = signal<number>(0);
+  readonly textBoxContentIndex = signal<number>(0);
+  readonly textBoxContentCount = signal<number>(0);
+  readonly textBoxContent = signal<string[]>([]);
+  readonly textBoxTitle = signal<string>('');
 
   readonly payload = signal<PlaybackResponse | null>(null);
   readonly loading = signal(false);
@@ -101,7 +112,6 @@ export class PlayPage {
     this.actionIndex.set(this.actionIndex() + 1);
     this.currentAction.set(this.currentTimeline()?.actions[this.actionIndex()]!);
     if (this.currentAction()?.componentId !== null) {
-      console.log(this.currentAction());
       this.api.getComponent(this.currentAction()?.componentId!).subscribe({
         next: (c) => {
           this.currentComponent.set(c);
@@ -109,6 +119,17 @@ export class PlayPage {
             // this.enabledSprites.set(
             //   this.enabledSprites().concat([this.currentComponent()!.sprite]),
             // );
+          } else if (this.currentComponent()?.textBox != null) {
+            this.textBox.set(c.textBox!);
+            this.textBoxCPS.set(c.textBox!.charPerSecond);
+            this.textBoxOutputStarted.set(true);
+            this.textBoxOutput.set('');
+            this.textBoxTitle.set(c.textBox?.title ?? '');
+            this.textBoxContentIndex.set(0);
+            this.textBoxContent.set(c.textBox?.content!);
+            this.textBoxContentCount.set(c.textBox?.content.length!);
+            this.textBoxOutputStarted.set(true);
+            this.initiateTextBox();
           }
         },
       });
@@ -116,6 +137,32 @@ export class PlayPage {
 
     if (this.currentAction()?.type === 'LoadScene') {
       //Load next scene
+    }
+  }
+
+  initiateTextBox() {}
+
+  progressTextbox(textBox: Textbox) {
+    if (this.textBoxOutputStarted()) {
+      this.textBoxOutput.set(this.textBoxContent()[this.textBoxContentIndex()]);
+      this.textBoxOutputStarted.set(false);
+    } else {
+      if (this.textBoxContentIndex() < this.textBoxContentCount() - 1) {
+        this.textBoxContentIndex.set(this.textBoxContentIndex() + 1);
+        this.textBoxOutput.set('');
+        this.textBoxOutputStarted.set(true);
+        this.initiateTextBox();
+      } else {
+        this.textBox.set(null);
+        this.textBoxCPS.set(0);
+        this.textBoxOutput.set('');
+        this.textBoxTitle.set('');
+        this.textBoxContentIndex.set(0);
+        this.textBoxContent.set([]);
+        this.textBoxContentCount.set(0);
+        this.textBoxOutputStarted.set(false);
+        this.stepTimeline();
+      }
     }
   }
 

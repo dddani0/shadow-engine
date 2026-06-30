@@ -13,27 +13,19 @@
     </button>
   </div>
   <br />
-  <div style="height: 500px">
-    <div class="container-sm h-100 d-inline-block border border-5 border-danger bg-secondary">
-      @if (this.currentAction() !== null) {
-        @switch (this.currentAction()?.type) {
-          @case ('EnableTextbox') {
-            <div class="d-flex flex-column justify-content-end">
-              <div class="container border bottom-100">
-                <h2>{{ this.currentComponent()?.textBox?.title }}</h2>
-                @if (this.currentComponent()?.textBox?.content != null) {
-                  @if (this.currentComponent()?.textBox!.content!.length > 0) {
-                    <p>{{ this.currentComponent()?.textBox!.content[0] }}</p>
-                  }
-                }
-              </div>
-            </div>
-          }
-          @case ('EnableChoiceMenu') {
-            EnableChoiceMenu
-          }
-        }
-      }
-    </div>
+  <div style="height: 400px">
+    <div class="container-sm h-100 d-inline-block border border-5 border-danger bg-secondary"></div>
   </div>
+  @if (this.textBox() != null) {
+    <div class="container" (click)="progressTextbox(this.textBox()!)">
+      @if (this.textBoxTitle().length > 0) {
+        <h3>{{ this.textBoxTitle() }}</h3>
+      }
+      <div class="container border">
+        @if (this.textBoxContentCount() > 0) {
+          <p>{{ this.textBoxOutput() }}</p>
+        }
+      </div>
+    </div>
+  }
 </div>
