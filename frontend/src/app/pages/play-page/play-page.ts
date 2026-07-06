@@ -140,7 +140,21 @@ export class PlayPage {
     }
   }
 
-  initiateTextBox() {}
+  initiateTextBox() {
+    this.textBoxOutputStarted.set(true);
+    let idx = 0;
+    let interval = setInterval(() => {
+      if (idx < this.textBoxContent()[this.textBoxContentIndex()].length) {
+        this.textBoxOutput.set(
+          this.textBoxOutput() + this.textBoxContent()[this.textBoxContentIndex()][idx],
+        );
+        idx++;
+      } else {
+        this.textBoxOutputStarted.set(false);
+        clearInterval(interval);
+      }
+    }, 6000 / this.textBoxCPS());
+  }
 
   progressTextbox(textBox: Textbox) {
     if (this.textBoxOutputStarted()) {
